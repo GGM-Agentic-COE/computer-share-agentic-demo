@@ -1,0 +1,33 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-inception-epic-creator",
+  "phase": "2-pi-cycle-planning",
+  "inputs": ["docs/sdlc/phase-1-requirements/prd.md", "docs/sdlc/phase-0-vision/vision.md", "docs/sdlc/phase-1-requirements/dependency-graph.json"],
+  "note": "No live Jira in this environment — epic IDs below are simulated issue keys (EPIC-*) rather than real Jira keys; epics-from-prd.md already contained a hand-authored version of this breakdown, reconciled here against the atomic FR-IDs from Phase 1 for traceability.",
+  "epics": [
+    {
+      "key": "EPIC-1",
+      "name": "Automated Regulatory Form Generation and Submission",
+      "maps_to_prd_epic": "E1",
+      "vision": "Enable instant, accurate, compliant generation and submission of regulatory forms, minimizing manual effort and risk.",
+      "fr_ids": ["FR-001","FR-002","FR-003","FR-004","FR-009","FR-010","FR-011","FR-012","FR-013","FR-020"],
+      "execution_order": 1
+    },
+    {
+      "key": "EPIC-2",
+      "name": "Real-Time Data Streaming, Notifications, and Monitoring",
+      "maps_to_prd_epic": "E2",
+      "vision": "Deliver real-time, secure data streaming and actionable notifications, ensuring timely compliance and proactive risk management.",
+      "fr_ids": ["FR-005","FR-006","FR-007","FR-008","FR-015","FR-016"],
+      "execution_order": 2
+    },
+    {
+      "key": "EPIC-3",
+      "name": "Error Handling, Edge Cases, and Extensibility",
+      "maps_to_prd_epic": "E3",
+      "vision": "Robustly handle errors and edge cases, and support future extensibility for additional regulatory forms and analytics.",
+      "fr_ids": ["FR-014","FR-017","FR-018","FR-019"],
+      "execution_order": 3
+    }
+  ]
+}

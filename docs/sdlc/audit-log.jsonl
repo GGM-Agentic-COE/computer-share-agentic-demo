@@ -1,0 +1,71 @@
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"workflow.started","phase":"0-idea-to-vision"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.0.started","phase":"0-idea-to-vision"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-vision-idea-intake","phase":"0-idea-to-vision","output":"docs/sdlc/phase-0-vision/idea-brief.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-vision-market-analyzer","phase":"0-idea-to-vision","output":"docs/sdlc/phase-0-vision/market-analysis.md","tool_calls":["WebSearch"]}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-vision-regulatory-feasibility-checker","phase":"0-idea-to-vision","output":"docs/sdlc/phase-0-vision/regulatory-feasibility.md","tool_calls":["WebSearch"],"findings":{"red":0,"amber":2,"green":6}}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"viability-score","threshold":7,"score":8,"method":"independent-agent"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-vision-statement-generator","phase":"0-idea-to-vision","output":"docs/sdlc/phase-0-vision/vision.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.0.completed","phase":"0-idea-to-vision"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"human_gate.pending","phase":"0-idea-to-vision","gate":"product-lead-vision-review"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"human_gate.approved","phase":"0-idea-to-vision","gate":"product-lead-vision-review","decision":"approved-as-is"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.1.started","phase":"1-requirements-impact-dependency"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-requirements-elicitor","phase":"1-requirements-impact-dependency","output":"docs/sdlc/phase-1-requirements/functional-requirements.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-requirements-nfr-classifier","phase":"1-requirements-impact-dependency","output":"docs/sdlc/phase-1-requirements/nfr-spec.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"requirements-completeness","threshold":7,"score":8,"method":"independent-agent"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-requirements-prd-composer","phase":"1-requirements-impact-dependency","output":"docs/sdlc/phase-1-requirements/prd.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-planning-impact-assessor","phase":"1-requirements-impact-dependency","output":"docs/sdlc/phase-1-requirements/impact-assessment.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-planning-dependency-mapper","phase":"1-requirements-impact-dependency","output":"docs/sdlc/phase-1-requirements/dependency-graph.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"dependency-graph-integrity","threshold":7,"score":8,"method":"independent-agent"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.1.completed","phase":"1-requirements-impact-dependency"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.2.started","phase":"2-pi-cycle-planning"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-inception-epic-creator","phase":"2-pi-cycle-planning","output":"docs/sdlc/phase-2-planning/epics.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-inception-feature-decomposer","phase":"2-pi-cycle-planning","output":"docs/sdlc/phase-2-planning/features.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-planning-backlog-prioritizer","phase":"2-pi-cycle-planning","output":"docs/sdlc/phase-2-planning/prioritized-backlog.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-planning-feature-cycle-planner","phase":"2-pi-cycle-planning","output":"docs/sdlc/phase-2-planning/cycle-plan.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.skipped","agent":"L1-jira-orchestrator","phase":"2-pi-cycle-planning","reason":"no live Jira instance in this environment; epics.json/features.json serve as the durable record"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"human_gate.auto_approved","phase":"2-pi-cycle-planning","gate":"product-lead-dependency-capacity-review","note":"not a real approval; auto-continued per user instruction to produce full breadth across phases in one pass"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.2.completed","phase":"2-pi-cycle-planning"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.3.started","phase":"3-inception"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-inception-story-generator","phase":"3-inception","output":"docs/sdlc/phase-3-inception/stories.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-inception-task-generator","phase":"3-inception","output":"docs/sdlc/phase-3-inception/tasks.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.skipped","agent":"L1-jira-orchestrator","phase":"3-inception","reason":"no live Jira instance in this environment"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.3.completed","phase":"3-inception"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.4.started","phase":"4-design"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-user-journey-mapper","phase":"4-design","output":"docs/sdlc/phase-4-design/user-journeys.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-ux-wireframe","phase":"4-design","output":"docs/sdlc/phase-4-design/wireframes.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-api-spec","phase":"4-design","output":"docs/sdlc/phase-4-design/openapi.yaml"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-hld","phase":"4-design","output":"docs/sdlc/phase-4-design/hld.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-lld","phase":"4-design","output":"docs/sdlc/phase-4-design/lld.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-design-data-architect","phase":"4-design","output":"docs/sdlc/phase-4-design/db-schema.sql"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.fail","gate":"design-quality-bundle","threshold":7,"score":6,"method":"independent-agent","gaps":6}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"remediation.applied","phase":"4-design","gaps_fixed":6}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"design-quality-bundle","threshold":7,"score":8,"method":"independent-agent","attempt":2}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.skipped","agent":"L1-github-orchestrator","phase":"4-design","invocation":"1 of 3 (design-publish)","reason":"no Confluence/GitHub-remote publish in this local simulation; docs committed to the repo directly instead"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"human_gate.auto_approved","phase":"4-design","gate":"architecture-data-model-signoff","note":"not a real approval; auto-continued per user instruction"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.4.completed","phase":"4-design"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.5.started","phase":"5-test-strategy"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-testing-scenario-writer","phase":"5-test-strategy","output":"docs/sdlc/phase-5-test-strategy/test-scenarios.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-testing-case-writer","phase":"5-test-strategy","output":"docs/sdlc/phase-5-test-strategy/test-cases.feature"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-testing-synthetic-data-generator","phase":"5-test-strategy","output":"docs/sdlc/phase-5-test-strategy/synthetic-data.json"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-testing-script-generator","phase":"5-test-strategy","output":"tests/playwright/golden-path.spec.ts, tests/api/FilingGoldenPathIT.java"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.skipped","agent":"L1-xray-orchestrator","phase":"5-test-strategy","reason":"no live XRay/Jira instance in this environment"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"test-coverage","threshold":7,"score":8,"method":"self-assessed"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.5.completed","phase":"5-test-strategy"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.6.started","phase":"6-construction"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-construction-api-code-generator","phase":"6-construction","output":"api/ (Spring Boot)"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"api-code-quality","threshold":7,"method":"self-assessed + mvn test 9/9"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-construction-ui-code-generator","phase":"6-construction","output":"ui/ (React + TS)"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"ui-code-quality","threshold":7,"method":"self-assessed + vitest 5/5 + npm run build"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-construction-unit-test-generator","phase":"6-construction","output":"api/src/test, ui/src/test"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.quality_gate.pass","gate":"unit-test-coverage","threshold":7,"method":"self-assessed"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-construction-code-reviewer","phase":"6-construction","output":"docs/sdlc/phase-6-construction/review-report.md","findings":6,"findings_fixed":6,"method":"independent-agent"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"bug.caught_by_live_run","phase":"6-construction","detail":"CORS-preflight rejected by auth filter — found only via real browser run, not static review or MockMvc tests"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"verification.golden_path_confirmed","phase":"6-construction","method":"real browser + real running API, not simulated"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-construction-doc-generator","phase":"6-construction","output":"docs/sdlc/phase-6-construction/CHANGELOG.md"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.skipped","agent":"L1-github-orchestrator","phase":"6-construction","invocation":"2 of 3 (impl-commit)","reason":"local git commit performed directly instead of a GitHub branch push (no remote push per user's PR-handling choice)"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"human_gate.auto_approved","phase":"6-construction","gate":"code-review-signoff","note":"not a real approval; auto-continued per user instruction — but backed by real passing tests and a live-verified golden path, not just generated artifacts"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.6.completed","phase":"6-construction"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.7.started","phase":"7-pull-request"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"step.completed","agent":"L1-github-orchestrator","phase":"7-pull-request","invocation":"3 of 3 (PR)","output":"docs/sdlc/phase-7-pr/pr-description.md","note":"simulated locally — no branch pushed, no real PR opened, per user's PR-handling choice"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"phase.7.completed","phase":"7-pull-request"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"workflow.completed","correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559"}

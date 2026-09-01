@@ -1,0 +1,34 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-requirements-elicitor",
+  "phase": "1-requirements-impact-dependency",
+  "source": "docs/sdlc/phase-0-vision/vision.md (Product Lead approved)",
+  "functional_requirements": [
+    {"id": "FR-001", "text": "Detect eligible securities transaction execution events in EquatePlus.", "source_fr": "PRD FR1", "priority": "must", "epic": "E1", "feature": "E1.F1"},
+    {"id": "FR-002", "text": "Map executed transaction data to SEC Form 4 fields.", "source_fr": "PRD FR1", "priority": "must", "epic": "E1", "feature": "E1.F1"},
+    {"id": "FR-003", "text": "Generate a pre-filled SEC Form 4 within 5 minutes of transaction execution.", "source_fr": "PRD FR1", "priority": "must", "epic": "E1", "feature": "E1.F1"},
+    {"id": "FR-004", "text": "Validate all form fields against regulatory standards before submission; block submission on validation failure.", "source_fr": "PRD FR6", "priority": "must", "epic": "E1", "feature": "E1.F2"},
+    {"id": "FR-005", "text": "Securely stream transaction and form data to designated legal/compliance users in real time.", "source_fr": "PRD FR2", "priority": "must", "epic": "E2", "feature": "E2.F1"},
+    {"id": "FR-006", "text": "Send a notification to executive and legal team when a regulatory form is generated.", "source_fr": "PRD FR3", "priority": "must", "epic": "E2", "feature": "E2.F2"},
+    {"id": "FR-007", "text": "Send a notification to executive and legal team when a form is successfully submitted.", "source_fr": "PRD FR3", "priority": "must", "epic": "E2", "feature": "E2.F2"},
+    {"id": "FR-008", "text": "Send a deadline-risk warning notification when a filing is unsubmitted and less than 12 hours remain, computed against the EDGAR 5:30pm ET same-day cutoff (see vision.md Regulatory Posture #2, not the raw calendar deadline).", "source_fr": "PRD FR3 / AC3", "priority": "must", "epic": "E2", "feature": "E2.F2"},
+    {"id": "FR-009", "text": "Allow a Legal & Compliance user to review a pre-filled form.", "source_fr": "PRD FR4", "priority": "must", "epic": "E1", "feature": "E1.F3"},
+    {"id": "FR-010", "text": "Allow a Legal & Compliance user to edit a pre-filled form's fields, with changes re-validated.", "source_fr": "PRD FR4", "priority": "must", "epic": "E1", "feature": "E1.F3"},
+    {"id": "FR-011", "text": "Allow a Legal & Compliance user to approve a validated form for submission.", "source_fr": "PRD FR4", "priority": "must", "epic": "E1", "feature": "E1.F3"},
+    {"id": "FR-012", "text": "Log every form generation, edit, approval, and submission action with timestamp and user ID for audit purposes.", "source_fr": "PRD FR5", "priority": "must", "epic": "E1", "feature": "E1.F4"},
+    {"id": "FR-013", "text": "Provide access to historical filings and their statuses for authorized users.", "source_fr": "PRD FR5 / AC5", "priority": "must", "epic": "E1", "feature": "E1.F4"},
+    {"id": "FR-014", "text": "Support bulk processing of multiple trades executed within a short timeframe, generating a separate form per trade with none omitted.", "source_fr": "PRD FR7", "priority": "should", "epic": "E3", "feature": "E3.F2"},
+    {"id": "FR-015", "text": "Provide a dashboard for legal/compliance users to monitor filing status, deadlines, and error alerts in real time.", "source_fr": "PRD FR8", "priority": "should", "epic": "E2", "feature": "E2.F3"},
+    {"id": "FR-016", "text": "Allow export of filing data in CSV or PDF format for internal audits.", "source_fr": "PRD FR9", "priority": "should", "epic": "E2", "feature": "E2.F4"},
+    {"id": "FR-017", "text": "Detect transaction data sync failures and notify legal/compliance users immediately.", "source_fr": "epics-from-prd.md US5 / E3.F1 (not a numbered PRD §5 FR — sourced from the user-story and epic breakdown instead)", "priority": "should", "epic": "E3", "feature": "E3.F1"},
+    {"id": "FR-018", "text": "Support integration with third-party compliance analytics tools via secure export/API.", "source_fr": "PRD FR10", "priority": "nice", "epic": "E3", "feature": "E3.F4"},
+    {"id": "FR-019", "text": "Support generation and validation of additional regulatory forms beyond SEC Form 4 (e.g. Form 5, Form 144) via a modular form-template mechanism.", "source_fr": "PRD FR11", "priority": "nice", "epic": "E3", "feature": "E3.F3"},
+    {"id": "FR-020", "text": "Submit an approved form to SEC EDGAR (Regulation S-T electronic filing), OR hand off the completed form package to an existing manual/agent-assisted EDGAR filing process — mechanism to be confirmed with Legal & Compliance before Design.", "source_fr": "New — surfaced by vision.md Regulatory Posture #1, not present verbatim in PRD", "priority": "must", "epic": "E1", "feature": "E1.F3", "status": "open_dependency"}
+  ],
+  "compound_splits": [
+    {"original": "PRD FR1", "note": "Split into detect (FR-001), map (FR-002), generate-within-5min (FR-003) — original bundled detection, mapping, and generation into one requirement."},
+    {"original": "PRD FR3", "note": "Split into three distinct notification triggers (FR-006 generated, FR-007 submitted, FR-008 deadline-risk) — each has different timing/recipients/urgency and should be independently testable."},
+    {"original": "PRD FR4", "note": "Split into review (FR-009), edit (FR-010), approve (FR-011) — distinct user actions with separate audit events per FR-012."},
+    {"original": "PRD FR5", "note": "Split into log-actions (FR-012, direct text match) and historical-filing-access (FR-013, derived from AC5 rather than FR5's literal text since FR5 doesn't explicitly mention a browsing/access UI) — disclosed here per quality-gate finding; originally omitted from this list."}
+  ]
+}

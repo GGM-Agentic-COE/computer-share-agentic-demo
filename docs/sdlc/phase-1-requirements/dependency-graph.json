@@ -1,0 +1,41 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-planning-dependency-mapper",
+  "phase": "1-requirements-impact-dependency",
+  "inputs": ["docs/sdlc/phase-1-requirements/impact-assessment.md", "docs/sdlc/phase-1-requirements/prd.md"],
+  "verification": {
+    "method": "Kahn's algorithm topological sort, computed (not asserted) against the edge list below",
+    "cycle_check": "PASS — no cycle detected",
+    "critical_path": [
+      "transaction-event-listener",
+      "form-generation-engine",
+      "validation-engine",
+      "review-approval-workflow",
+      "edgar-submission-connector",
+      "audit-log-service",
+      "compliance-dashboard"
+    ]
+  },
+  "build_order": [
+    "transaction-event-listener", "form-template-registry", "sync-error-monitor",
+    "form-generation-engine", "validation-engine", "data-streaming-service", "bulk-trade-handler",
+    "review-approval-workflow", "edgar-submission-connector", "audit-log-service",
+    "notification-service", "export-service", "analytics-integration", "compliance-dashboard"
+  ],
+  "components": [
+    {"id": "transaction-event-listener", "feature": "E1.F1", "depends_on": [], "risk": "medium", "risk_note": "Assumes EquatePlus emits a consumable transaction-execution event; unverified — see impact-assessment.md."},
+    {"id": "form-template-registry", "feature": "E3.F3", "depends_on": [], "risk": "low", "risk_note": "MVP: single hardcoded Form 4 template; registry abstraction built for extensibility but not populated with Form 5/144 in MVP."},
+    {"id": "form-generation-engine", "feature": "E1.F1", "depends_on": ["transaction-event-listener", "form-template-registry"], "risk": "medium", "risk_note": "Sits at the fan-out root of the critical path; any field-mapping error here propagates into every downstream component (validation, review, submission, audit)."},
+    {"id": "validation-engine", "feature": "E1.F2", "depends_on": ["form-generation-engine"], "risk": "medium", "risk_note": "Regulatory accuracy is the highest-stakes correctness surface in the system."},
+    {"id": "data-streaming-service", "feature": "E2.F1", "depends_on": ["form-generation-engine"], "risk": "low-medium", "risk_note": "Downgraded from a plain 'low' at quality-gate review: it sits on the critical path to compliance-dashboard and carries a <1-minute real-time + TLS NFR, so the regulatory stakes are higher than a bare 'low' implies even though the MVP implementation (in-process/WebSocket push, not a dedicated message bus) is simple."},
+    {"id": "sync-error-monitor", "feature": "E3.F1", "depends_on": ["transaction-event-listener"], "risk": "low", "risk_note": "Not built in MVP construction; design-only."},
+    {"id": "bulk-trade-handler", "feature": "E3.F2", "depends_on": ["transaction-event-listener", "form-generation-engine"], "risk": "medium", "risk_note": "Not built in MVP construction; design-only."},
+    {"id": "review-approval-workflow", "feature": "E1.F3", "depends_on": ["validation-engine"], "risk": "medium", "risk_note": "Human-in-the-loop step; reviewer inaction is a distinct risk path flagged in vision.md/prd.md that this component's design must handle via escalation, not just a UI review screen."},
+    {"id": "edgar-submission-connector", "feature": "E1.F3", "depends_on": ["review-approval-workflow"], "risk": "high", "risk_note": "FR-020 open dependency — mechanism (direct EDGAR API vs. handoff) undetermined. MVP builds this as a mocked/stubbed connector."},
+    {"id": "audit-log-service", "feature": "E1.F4", "depends_on": ["form-generation-engine", "review-approval-workflow", "edgar-submission-connector"], "risk": "medium", "risk_note": "7-year retention requirement; MVP demonstrates the log model, not production retention infra."},
+    {"id": "notification-service", "feature": "E2.F2", "depends_on": ["form-generation-engine", "review-approval-workflow", "edgar-submission-connector"], "risk": "low-medium", "risk_note": "MVP: in-app only. Rated low-medium (not flat low) to match impact-assessment.md's 'Low-Medium' rating for notification infrastructure rather than silently flattening it."},
+    {"id": "export-service", "feature": "E2.F4", "depends_on": ["audit-log-service"], "risk": "low", "risk_note": "Not built in MVP construction; design-only."},
+    {"id": "analytics-integration", "feature": "E3.F4", "depends_on": ["audit-log-service"], "risk": "low", "risk_note": "Not built in MVP construction; design-only."},
+    {"id": "compliance-dashboard", "feature": "E2.F3", "depends_on": ["data-streaming-service", "audit-log-service", "notification-service"], "risk": "medium", "risk_note": "Highest fan-in component — depends on three other services being functional first; naturally last on the critical path."}
+  ]
+}

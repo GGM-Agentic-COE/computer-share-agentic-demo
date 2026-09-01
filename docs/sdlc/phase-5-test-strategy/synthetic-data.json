@@ -1,0 +1,25 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-testing-synthetic-data-generator",
+  "phase": "5-test-strategy",
+  "inputs": ["docs/sdlc/phase-4-design/db-schema.sql", "docs/sdlc/phase-5-test-strategy/test-cases.feature"],
+  "pii_note": "All names, IDs, and transaction values below are fabricated for this demo — no real EquatePlus customer, executive, or transaction data was used or referenced anywhere in this pipeline. gr-L1-pii-detection: PASS (no real PII source existed to leak from).",
+  "users": [
+    {"id": "exec-1", "displayName": "J. Alvarez", "role": "EXECUTIVE"},
+    {"id": "exec-2", "displayName": "R. Chen", "role": "EXECUTIVE"},
+    {"id": "exec-3", "displayName": "M. Okafor", "role": "EXECUTIVE"},
+    {"id": "legal-1", "displayName": "S. Kapoor", "role": "LEGAL_COMPLIANCE"},
+    {"id": "legal-2", "displayName": "D. Whitfield", "role": "LEGAL_COMPLIANCE"}
+  ],
+  "transactions": [
+    {"executiveId": "exec-1", "transactionCode": "S", "shares": 1200, "pricePerShare": 42.10, "expected_outcome": "valid → UNDER_REVIEW"},
+    {"executiveId": "exec-2", "transactionCode": "P", "shares": 500, "pricePerShare": 18.75, "expected_outcome": "valid → UNDER_REVIEW"},
+    {"executiveId": "exec-3", "transactionCode": "A", "shares": 0, "pricePerShare": 0, "expected_outcome": "fields present but invalid (shares must be > 0) → UNDER_REVIEW with validationErrors, used for S3/S8 (approval blocked until edited)"},
+    {"executiveId": "exec-3", "transactionCode": null, "shares": 100, "pricePerShare": 10.0, "expected_outcome": "required field (transactionCode) missing → INCOMPLETE, used for S2 (refined at construction — see docs/sdlc/phase-4-design/hld.md data flow)"}
+  ],
+  "filings_fixture": [
+    {"id": "filing-demo-1", "executiveId": "exec-1", "status": "SUBMITTED", "note": "Used for S10/S14 historical view demo."},
+    {"id": "filing-demo-2", "executiveId": "exec-1", "status": "UNDER_REVIEW", "edgarCutoffOffsetHours": 9, "note": "Used for S12 deadline-risk demo — 9h < 12h threshold."},
+    {"id": "filing-demo-3", "executiveId": "exec-2", "status": "VALIDATED", "note": "Used for S7 approve-flow demo."}
+  ]
+}
