@@ -23,13 +23,13 @@ import static com.computershare.regfiling.service.BusinessDayCalculator.ET;
  * EquatePlus transaction event), map to Form 4 fields, generate within 5 minutes (synchronous
  * in this MVP, trivially satisfying the 5-minute NFR).
  *
- * Demo issuer is hardcoded ("Acme Corp — Demo Issuer") since there is no real multi-issuer
+ * Demo issuer is hardcoded ("Ascendion INC — Demo Issuer") since there is no real multi-issuer
  * EquatePlus feed to source it from in this environment.
  */
 @Service
 public class FormGenerationService {
 
-    private static final String DEMO_ISSUER = "Acme Corp — Demo Issuer";
+    private static final String DEMO_ISSUER = "Ascendion INC — Demo Issuer";
     private static final int FILING_DEADLINE_BUSINESS_DAYS = 2;
 
     private final FilingRepository filingRepository;
@@ -77,7 +77,7 @@ public class FormGenerationService {
         filing.setEdgarCutoffAt(businessDayCalculator
                 .edgarCutoff(filing.getTransactionDate(), FILING_DEADLINE_BUSINESS_DAYS).toInstant());
 
-        // FR-001's "missing required data" path (STORY-1 AC2): a required field literally absent
+        // FR-001's "missing required data" path (E1.F1-S1 AC2): a required field literally absent
         // from the client's request. Distinct from "field present but invalid value", which
         // ValidationService catches below and results in UNDER_REVIEW-with-errors, not INCOMPLETE.
         boolean requiredFieldMissing = isBlank(filing.getTransactionCode())

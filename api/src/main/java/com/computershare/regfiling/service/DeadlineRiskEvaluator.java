@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 
 /**
- * FR-008/STORY-8. Fires DEADLINE_RISK against edgarCutoffAt (the 5:30pm ET EDGAR same-day
+ * FR-008/E2.F2-S2. Fires DEADLINE_RISK against edgarCutoffAt (the 5:30pm ET EDGAR same-day
  * cutoff), NOT the raw statutory deadlineAt — see docs/sdlc/phase-0-vision/vision.md Regulatory
  * Posture #2. Idempotent via Filing.deadlineRiskFired.
  */

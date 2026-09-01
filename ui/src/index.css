@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens — from docs/design/computershare-design-system.md (real extracted values from
+   the Computershare site) applied to this data-dense application per that document's EA11
+   guidance. HSL values computed directly from the source hex codes, not approximated. */
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 320 10% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 320 10% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 320 10% 11%;
+
+    --primary: 319 72% 34%;          /* #93186c — brand magenta */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 271 51% 26%;        /* #432063 — brand deep purple */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 3% 94%;               /* #f0efef */
+    --muted-foreground: 322 5% 35%;  /* #5c5459 */
+
+    --accent: 0 3% 94%;
+    --accent-foreground: 320 10% 11%;
+
+    --destructive: 0 74% 42%;        /* #b91c1c */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 6% 88%;              /* #e2dede */
+    --input: 0 6% 88%;
+    --ring: 319 72% 34%;
+
+    /* Semantic status colors — separate from the brand accent (dataviz-style guidance) */
+    --status-incomplete: 0 74% 42%;
+    --status-review: 39 72% 36%;
+    --status-validated: 170 78% 27%;
+    --status-submitted: 145 45% 34%;
+
+    --radius: 0.5rem; /* 8px — matches the design system's input radius; cards/pills override per-component */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Manrope', -apple-system, 'Segoe UI', sans-serif;
+  }
+}

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-// In-app channel only in MVP — email/SMS out of scope (features.json FEAT-6 note).
+// In-app channel only in MVP — email/SMS out of scope (features.json E2.F2 note).
 @Service
 public class NotificationService {
 
@@ -27,7 +27,7 @@ public class NotificationService {
     }
 
     // Broadcasts to all LEGAL_COMPLIANCE-role users — MVP has no per-filing officer assignment
-    // (see docs/sdlc/phase-4-design/user-journeys.md, revised at the Phase 4 design-quality gate).
+    // (see docs/sdlc/phase-4-design/user-flows.md, revised at the Phase 4 design-quality gate).
     public void notifyAllLegalCompliance(String filingId, NotificationType type, String message) {
         for (User user : userRepository.findAll()) {
             if (user.getRole() == UserRole.LEGAL_COMPLIANCE) {

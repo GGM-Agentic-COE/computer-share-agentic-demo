@@ -4,9 +4,14 @@ import { api } from '../api';
 import { useAuth } from '../AuthContext';
 import type { Filing, FilingStatus } from '../types';
 import { FilingStatusBadge } from '../components/FilingStatusBadge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-// wireframes.md Screen 2 — Compliance Dashboard. WU-11. Sorted by deadline urgency by default
-// per user-journeys.md's drop-off-risk design decision.
+const STATUS_ALL = 'ALL'; // Radix Select.Item can't take value="" — sentinel for "no filter"
+
+// wireframes.html Screen 2 — Compliance Dashboard. WU-11. Sorted by deadline urgency by default
+// per user-flows.md's drop-off-risk design decision.
 export function ComplianceDashboard() {
   const { authHeader } = useAuth();
   const [filings, setFilings] = useState<Filing[]>([]);
@@ -27,55 +32,59 @@ export function ComplianceDashboard() {
 
   return (
     <div>
-      <h2>Compliance Dashboard</h2>
-      <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
-        <label>
-          Status:{' '}
-          <select
-            aria-label="Filter by status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value as FilingStatus | '')}
-          >
-            <option value="">All</option>
-            <option value="INCOMPLETE">Incomplete</option>
-            <option value="UNDER_REVIEW">Under Review</option>
-            <option value="VALIDATED">Validated</option>
-            <option value="SUBMITTED">Submitted</option>
-          </select>
-        </label>
-        <input
+      <h2 className="mb-4 text-base font-bold">Compliance Dashboard</h2>
+      <div className="mb-4 flex flex-wrap gap-3">
+        <Select
+          value={status || STATUS_ALL}
+          onValueChange={(v) => setStatus(v === STATUS_ALL ? '' : (v as FilingStatus))}
+        >
+          <SelectTrigger aria-label="Filter by status" className="h-9 w-[180px] text-xs">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={STATUS_ALL}>Status: All</SelectItem>
+            <SelectItem value="INCOMPLETE">Incomplete</SelectItem>
+            <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
+            <SelectItem value="VALIDATED">Validated</SelectItem>
+            <SelectItem value="SUBMITTED">Submitted</SelectItem>
+          </SelectContent>
+        </Select>
+        <Input
           aria-label="Search"
           placeholder="Search issuer or executive…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="h-9 w-64 text-xs"
         />
       </div>
 
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ textAlign: 'left', borderBottom: '2px solid #ddd' }}>
-            <th>Executive</th>
-            <th>Form</th>
-            <th>Status</th>
-            <th>Deadline (EDGAR cutoff)</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Executive</TableHead>
+            <TableHead>Form</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Deadline (EDGAR cutoff)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {filings.map((f) => (
-            <tr key={f.id} style={{ borderBottom: '1px solid #eee' }} data-testid="dashboard-row">
-              <td>
-                <Link to={`/filings/${f.id}`}>{f.executiveId}</Link>
-              </td>
-              <td>{f.formType}</td>
-              <td>
+            <TableRow key={f.id} data-testid="dashboard-row">
+              <TableCell>
+                <Link to={`/filings/${f.id}`} className="font-medium text-primary hover:underline">
+                  {f.executiveId}
+                </Link>
+              </TableCell>
+              <TableCell>{f.formType}</TableCell>
+              <TableCell>
                 <FilingStatusBadge status={f.status} />
-              </td>
-              <td>{new Date(f.edgarCutoffAt).toLocaleString()}</td>
-            </tr>
+              </TableCell>
+              <TableCell>{new Date(f.edgarCutoffAt).toLocaleString()}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-      {filings.length === 0 && <p>No filings match this filter.</p>}
+        </TableBody>
+      </Table>
+      {filings.length === 0 && <p className="mt-4 text-sm text-muted-foreground">No filings match this filter.</p>}
     </div>
   );
 }

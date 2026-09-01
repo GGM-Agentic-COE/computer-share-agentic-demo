@@ -50,7 +50,7 @@ Market sizing (TAM/SAM/SOM) is currently TBD — no licensed market-research fig
 
 ---
 
-## 👤 Human Gate — Product Lead Review
+## Human Gate — Product Lead Review
 
 **This is a stop point.** Per the blueprint, Requirements Elaboration (Phase 1) does not begin until:
 1. The Product Lead reviews this vision statement and the underlying viability score, and

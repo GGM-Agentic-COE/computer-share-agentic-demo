@@ -1,4 +1,6 @@
+import { TriangleAlert } from 'lucide-react';
 import type { Filing } from '../types';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Reads the hours remaining against edgarCutoffAt (the 5:30pm ET EDGAR cutoff) — NOT deadlineAt —
 // per vision.md Regulatory Posture #2 / lld.md DeadlineRiskEvaluator.
@@ -12,20 +14,11 @@ export function DeadlineRiskBanner({ filing }: { filing: Filing }) {
   }
 
   return (
-    <div
-      role="alert"
-      aria-live="polite"
-      style={{
-        background: '#fef2f2',
-        border: '1px solid #b91c1c',
-        color: '#7f1d1d',
-        borderRadius: 6,
-        padding: '6px 10px',
-        fontSize: 13,
-        marginTop: 4,
-      }}
-    >
-      ⚠ Deadline risk: {Math.max(0, Math.round(hoursRemaining))}h remaining before the EDGAR same-day cutoff
-    </div>
+    <Alert variant="destructive" className="mt-1.5" aria-live="polite">
+      <TriangleAlert className="h-4 w-4" aria-hidden="true" />
+      <AlertDescription>
+        Deadline risk: {Math.max(0, Math.round(hoursRemaining))}h remaining before the EDGAR same-day cutoff
+      </AlertDescription>
+    </Alert>
   );
 }

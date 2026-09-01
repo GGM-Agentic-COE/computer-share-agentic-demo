@@ -4,8 +4,9 @@ import { useAuth } from '../AuthContext';
 import type { Filing } from '../types';
 import { FilingStatusBadge } from '../components/FilingStatusBadge';
 import { DeadlineRiskBanner } from '../components/DeadlineRiskBanner';
+import { Button } from '@/components/ui/button';
 
-// wireframes.md Screen 1 — Executive Home. WU-10.
+// wireframes.html Screen 1 — Executive Home. WU-10.
 export function ExecutiveHome() {
   const { currentUser, authHeader } = useAuth();
   const [filings, setFilings] = useState<Filing[]>([]);
@@ -43,22 +44,24 @@ export function ExecutiveHome() {
 
   return (
     <div>
-      <button onClick={simulateTrade} disabled={busy}>
+      <Button onClick={simulateTrade} disabled={busy}>
         {busy ? 'Simulating…' : 'Simulate Trade'}
-      </button>
-      {message && <p role="status">{message}</p>}
+      </Button>
+      {message && (
+        <p role="status" className="mt-2 text-sm text-muted-foreground">
+          {message}
+        </p>
+      )}
 
-      <h2>My Filings</h2>
-      {filings.length === 0 && <p>No filings yet — simulate a trade to get started.</p>}
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <h2 className="mb-3 mt-8 text-xs font-bold uppercase tracking-wide text-muted-foreground">My Filings</h2>
+      {filings.length === 0 && (
+        <p className="text-sm text-muted-foreground">No filings yet — simulate a trade to get started.</p>
+      )}
+      <ul className="flex flex-col gap-2">
         {filings.map((f) => (
-          <li
-            key={f.id}
-            style={{ border: '1px solid #eee', borderRadius: 6, padding: 10, marginBottom: 8 }}
-            data-testid="filing-row"
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>
+          <li key={f.id} className="rounded-2xl border border-border p-4" data-testid="filing-row">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm">
                 Form 4 · {f.transactionDate} · {f.shares} sh @ ${f.pricePerShare}
               </span>
               <FilingStatusBadge status={f.status} />

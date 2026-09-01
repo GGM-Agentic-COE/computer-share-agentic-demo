@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-// FR-011/FR-020, STORY-4.
+// FR-011/FR-020, E1.F3-S2.
 @Service
 public class ApprovalService {
 

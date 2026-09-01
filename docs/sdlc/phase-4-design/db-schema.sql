@@ -13,7 +13,7 @@ CREATE TABLE users (
 
 CREATE TABLE filings (
     id                  VARCHAR(64) PRIMARY KEY,
-    form_type           VARCHAR(32) NOT NULL DEFAULT 'FORM_4', -- form-template-registry key; extensible (FEAT-12)
+    form_type           VARCHAR(32) NOT NULL DEFAULT 'FORM_4', -- form-template-registry key; extensible (E3.F3)
     executive_id        VARCHAR(64) NOT NULL REFERENCES users(id),
     -- GENERATED and APPROVED are audit_log.action values, not resting statuses here (see openapi.yaml FilingStatus) —
     -- a filing moves UNDER_REVIEW -> VALIDATED -> SUBMITTED, or INCOMPLETE if required data was missing at generation.
@@ -60,7 +60,7 @@ CREATE TABLE notifications (
 
 CREATE INDEX idx_notifications_user ON notifications(user_id, read);
 
--- form_templates: form-template-registry extensibility point (FEAT-12). MVP seeds exactly one row.
+-- form_templates: form-template-registry extensibility point (E3.F3). MVP seeds exactly one row.
 CREATE TABLE form_templates (
     form_type   VARCHAR(32) PRIMARY KEY,
     schema      JSONB NOT NULL,   -- field definitions: name, type, required, validation rule ref

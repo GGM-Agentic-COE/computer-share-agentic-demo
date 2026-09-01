@@ -1,5 +1,5 @@
 // L1-testing-script-generator · Phase 5 · Correlation ID C885C23C-949E-440C-8B0E-04FDD166A559
-// Inputs: test-cases.feature, openapi.yaml, wireframes.md
+// Inputs: test-cases.feature, openapi.yaml, wireframes.html
 // Covers: S1 (generate), S14 (dashboard shows filings), S5/S7 (edit + approve golden path)
 import { test, expect } from '@playwright/test';
 

@@ -19,7 +19,7 @@
 
 ## 2. Market sizing (TAM / SAM / SOM)
 
-**⚠ Not independently verified.** A web search for a market-size figure specific to "SEC Form 4 / insider-trading regulatory filing compliance software" returned no analyst report or market-sizing study (Gartner/Forrester-style sources were not accessible via this search). Rather than fabricate a number, this is flagged as a gap:
+**Note: not independently verified.** A web search for a market-size figure specific to "SEC Form 4 / insider-trading regulatory filing compliance software" returned no analyst report or market-sizing study (Gartner/Forrester-style sources were not accessible via this search). Rather than fabricate a number, this is flagged as a gap:
 
 - **TAM/SAM/SOM: TBD** — requires a licensed market-research source (e.g., Gartner, Forrester, IBISWorld) or a bottom-up estimate from Computershare's own EquatePlus customer base (number of publicly traded issuer clients × average Section 16 insider count), which was not available to this analysis.
 - **Directional proxy only:** all publicly traded US companies have Section 16 officers/directors subject to Form 4 — every EquatePlus issuer client is a candidate. Computershare's existing EquatePlus install base is the addressable market for this module specifically (expansion sell, not new-logo acquisition).
@@ -37,7 +37,7 @@ Directly reflected from the PRD's stated personas and pain points (not independe
 
 ## 5. Pricing benchmarks
 
-**⚠ Not independently verified for this specific module.** Public pricing for Shareworks/Carta/Certent is enterprise-tier and largely non-public (quote-based); no comparable public pricing was found for a standalone regulatory-filing-automation add-on. Recommend this module be positioned as a **value-added feature within the existing EquatePlus subscription** rather than priced standalone, pending commercial/pricing input — noted as an open question for the Product Lead at the human gate, not resolved here.
+**Note: not independently verified for this specific module.** Public pricing for Shareworks/Carta/Certent is enterprise-tier and largely non-public (quote-based); no comparable public pricing was found for a standalone regulatory-filing-automation add-on. Recommend this module be positioned as a **value-added feature within the existing EquatePlus subscription** rather than priced standalone, pending commercial/pricing input — noted as an open question for the Product Lead at the human gate, not resolved here.
 
 ## 6. SWOT synthesis
 
