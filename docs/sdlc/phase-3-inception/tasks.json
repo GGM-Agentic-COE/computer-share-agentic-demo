@@ -1,0 +1,22 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-inception-task-generator",
+  "phase": "3-inception",
+  "inputs": ["docs/sdlc/phase-3-inception/stories.json"],
+  "note": "tasks.json keeps its blueprint name for tooling continuity; each entry is a Work Unit — one coherent, independently verifiable, single-session unit of construction. Story references realigned to epics-from-prd.md's E#.F#-S# IDs. Right-sizing tests T1-T3 = (T1) fits one agent session, (T2) independently verifiable against its verification_ref, (T3) does not silently bundle more than one story's worth of behavior.",
+  "work_units": [
+    {"id": "WU-01", "stories": ["E1.F1-S1"], "layer": "api", "summary": "Mocked EquatePlus transaction-event ingestion endpoint + Form 4 field-mapping/generation service.", "verification_ref": "test-cases.feature: Scenario 'Generate Form 4 after valid trade'", "rightsizing": "pass"},
+    {"id": "WU-02", "stories": ["E1.F1-S3"], "layer": "api", "summary": "Incomplete-transaction detection: flag form incomplete + notify legal when required data is missing.", "verification_ref": "test-cases.feature: Scenario 'Incomplete transaction data'", "rightsizing": "pass"},
+    {"id": "WU-03", "stories": ["E1.F2-S1"], "layer": "api", "summary": "Validation engine: rule set against Form 4 field schema, blocking submission on failure with field-level errors.", "verification_ref": "test-cases.feature: Scenario 'Block submission on invalid field'", "rightsizing": "pass"},
+    {"id": "WU-04", "stories": ["E1.F3-S1"], "layer": "api", "summary": "Review/edit endpoints: PATCH filing fields, re-run validation on save.", "verification_ref": "test-cases.feature: Scenario 'Edit pre-filled form'", "rightsizing": "pass"},
+    {"id": "WU-05", "stories": ["E1.F3-S2"], "layer": "api", "summary": "Approve endpoint + mocked EdgarSubmissionConnector (logs a simulated submission, does not call a real external service).", "verification_ref": "test-cases.feature: Scenario 'Approve and submit form'", "rightsizing": "pass"},
+    {"id": "WU-06", "stories": ["E1.F3-S3","E1.F4-S1","E1.F4-S2"], "layer": "api", "summary": "AuditLogService recording every generate/edit/approve/submit action + historical filings query endpoint.", "verification_ref": "test-cases.feature: Scenario 'Audit log written on action' / 'View filing history'", "rightsizing": "pass"},
+    {"id": "WU-07", "stories": ["E2.F2-S1","E2.F2-S2","E2.F2-S3"], "layer": "api", "summary": "NotificationService (in-app): generated / deadline-risk (5:30pm ET EDGAR-cutoff-aware) / submitted events, queryable by user.", "verification_ref": "test-cases.feature: Scenario 'Notify on generation' / 'Deadline risk alert' / 'Notify on submission'", "rightsizing": "pass"},
+    {"id": "WU-08", "stories": ["E2.F3-S1","E2.F3-S2"], "layer": "api", "summary": "Dashboard aggregation endpoint: all filings with status/deadline, filterable by executive/status/search.", "verification_ref": "test-cases.feature: Scenario 'Dashboard shows all filings' / 'Filter dashboard'", "rightsizing": "pass"},
+    {"id": "WU-09", "stories": ["E1.F1-S1"], "layer": "data", "summary": "Seed/demo data + a 'simulate trade' trigger endpoint so the golden path can be demoed without a real EquatePlus feed.", "verification_ref": "manual golden-path walkthrough (Phase 6 human gate)", "rightsizing": "pass"},
+    {"id": "WU-10", "stories": ["E1.F1-S1","E2.F2-S1","E2.F2-S3","E1.F4-S1"], "layer": "ui", "summary": "Executive view: trigger a demo trade, see notifications, view own filing history.", "verification_ref": "wireframes.html screen 'Executive Home'", "rightsizing": "pass"},
+    {"id": "WU-11", "stories": ["E2.F3-S1","E2.F3-S2"], "layer": "ui", "summary": "Compliance dashboard: filing list, statuses, deadline countdowns, filter/search.", "verification_ref": "wireframes.html screen 'Compliance Dashboard'", "rightsizing": "pass"},
+    {"id": "WU-12", "stories": ["E1.F2-S1","E1.F3-S1","E1.F3-S2"], "layer": "ui", "summary": "Filing review/edit/approve screen for Legal & Compliance.", "verification_ref": "wireframes.html screen 'Filing Review'", "rightsizing": "pass"},
+    {"id": "WU-13", "stories": ["E2.F2-S1","E2.F2-S2","E2.F2-S3"], "layer": "ui", "summary": "Notifications panel (shared component, both personas).", "verification_ref": "wireframes.html screen 'Notifications Panel'", "rightsizing": "pass"}
+  ]
+}

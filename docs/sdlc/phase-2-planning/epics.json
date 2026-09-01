@@ -1,0 +1,160 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-inception-epic-creator",
+  "phase": "2-pi-cycle-planning",
+  "source": "epics-from-prd.md (repo root) — the actual AAVA-generated epic/feature/story breakdown, reproduced here in full per your instruction. Supersedes the earlier EPIC-1/EPIC-2/EPIC-3 + FEAT-1..13 simulated numbering; all epic/feature IDs below now match epics-from-prd.md exactly (E1/E2/E3, E#.F#).",
+  "note": "No live Jira in this environment — E1/E2/E3 and E#.F# below are epics-from-prd.md's own IDs, not simulated Jira keys.",
+  "epics": [
+    {
+      "id": "E1",
+      "name": "Automated Regulatory Form Generation and Submission",
+      "vision": "Enable instant, accurate, and compliant generation and submission of regulatory forms for securities transactions, minimizing manual effort and risk.",
+      "goals": [
+        "Automate SEC Form 4 generation within 5 minutes of transaction execution",
+        "Ensure all required form fields are pre-filled and validated",
+        "Support legal review and approval prior to submission",
+        "Provide audit trail for all form actions",
+        "Achieve 98% on-time, error-free filing rate"
+      ],
+      "success_metrics": [
+        "98% of filings submitted within regulatory deadlines",
+        "Zero manual data entry errors per quarter",
+        "Average time from transaction to form submission < 30 minutes",
+        "100% of forms logged with audit trail",
+        "90% adoption rate among eligible executives within 6 months"
+      ],
+      "risks_and_dependencies": "Risks include changes to regulatory form templates, integration challenges with EquatePlus APIs, and potential data mapping errors. Dependencies include up-to-date regulatory standards, EquatePlus transaction data, and secure notification infrastructure.",
+      "execution_order": 1,
+      "features": [
+        {
+          "id": "E1.F1", "name": "Automatic SEC Form 4 Generation", "type": "core",
+          "purpose": "Instantly generate pre-filled SEC Form 4 upon transaction execution.",
+          "mvp_construction": true, "component": "form-generation-engine",
+          "stories": ["Story 1 — Generate SEC Form 4 after trade", "Story 2 — Bulk form generation for multiple trades", "Story 3 — Handle incomplete transaction data"]
+        },
+        {
+          "id": "E1.F2", "name": "Form Field Validation and Compliance Logic", "type": "core",
+          "purpose": "Ensure all generated forms meet regulatory standards before submission.",
+          "mvp_construction": true, "component": "validation-engine",
+          "stories": ["Story 1 — Validate form fields before submission", "Story 2 — Update validation logic for regulatory changes"]
+        },
+        {
+          "id": "E1.F3", "name": "Legal Review and Approval Workflow", "type": "core",
+          "purpose": "Allow legal and compliance users to review, edit, and approve forms before submission.",
+          "mvp_construction": true, "component": "review-approval-workflow + edgar-submission-connector",
+          "stories": ["Story 1 — Edit pre-filled form before submission", "Story 2 — Approve form for submission", "Story 3 — Audit log edits and approvals"]
+        },
+        {
+          "id": "E1.F4", "name": "Audit Logging and Historical Filing Access", "type": "core",
+          "purpose": "Maintain a complete audit trail of all form actions and provide access to historical filings.",
+          "mvp_construction": true, "component": "audit-log-service",
+          "stories": ["Story 1 — View historical filings and statuses", "Story 2 — Audit log access for compliance"]
+        }
+      ]
+    },
+    {
+      "id": "E2",
+      "name": "Real-Time Data Streaming, Notifications, and Monitoring",
+      "vision": "Deliver real-time, secure data streaming and actionable notifications to legal teams and executives, ensuring timely compliance and proactive risk management.",
+      "goals": [
+        "Stream transaction and form data to legal teams in real time",
+        "Notify users of form generation, submission, and deadline risks",
+        "Provide a dashboard for monitoring filing status and errors",
+        "Enable export of filing data for audits",
+        "Support accessibility and high availability"
+      ],
+      "success_metrics": [
+        "100% of notifications delivered within 1 minute",
+        "Dashboard reflects filing status changes within 1 minute",
+        "All deadline risk alerts sent with >99% reliability",
+        "Export requests fulfilled within 2 minutes",
+        "Accessibility compliance verified by WCAG 2.1 AA audit"
+      ],
+      "risks_and_dependencies": "Risks include notification delivery failures, dashboard latency, and accessibility gaps. Dependencies include secure messaging infrastructure, dashboard UI, and export services.",
+      "execution_order": 2,
+      "features": [
+        {
+          "id": "E2.F1", "name": "Real-Time Data Streaming to Legal Teams", "type": "core",
+          "purpose": "Deliver transaction and form data to legal and compliance users instantly.",
+          "mvp_construction": false, "mvp_note": "Simplified into direct dashboard API polling in the MVP; a dedicated streaming component is the documented target (see hld.md).",
+          "component": "data-streaming-service",
+          "stories": ["Story 1 — Stream form data to legal team", "Story 2 — Handle data delivery failure"]
+        },
+        {
+          "id": "E2.F2", "name": "Notification System for Filings and Deadlines", "type": "core",
+          "purpose": "Notify executives and legal teams of form generation, submission, and deadline risks.",
+          "mvp_construction": true, "mvp_note": "In-app channel only; email/SMS designed but not built.",
+          "component": "notification-service",
+          "stories": ["Story 1 — Notify executive of form generation", "Story 2 — Alert on filing deadline risk", "Story 3 — Confirm successful submission"]
+        },
+        {
+          "id": "E2.F3", "name": "Compliance Dashboard for Monitoring and Alerts", "type": "core",
+          "purpose": "Provide a real-time dashboard for legal and compliance users to monitor filing statuses, deadlines, and errors.",
+          "mvp_construction": true, "component": "compliance-dashboard",
+          "stories": ["Story 1 — Monitor filing statuses in dashboard", "Story 2 — Display error alerts in dashboard"]
+        },
+        {
+          "id": "E2.F4", "name": "Export Filing Data for Audits", "type": "enhancement",
+          "purpose": "Allow legal users to export filing data in CSV or PDF format for internal audits.",
+          "mvp_construction": false, "component": "export-service",
+          "stories": ["Story 1 — Export filing data for audit"]
+        },
+        {
+          "id": "E2.F5", "name": "Accessibility and High Availability Compliance", "type": "infrastructure",
+          "purpose": "Ensure the platform is accessible to all users and meets reliability standards.",
+          "mvp_construction": false, "mvp_note": "WCAG-conscious UI patterns applied where free (semantic HTML, keyboard nav, no emoji-as-icon per computershare-design-system.md); full audit and HA/failover infra out of MVP scope.",
+          "component": "cross-cutting (UI + infra)",
+          "stories": ["Story 1 — Use platform with screen reader", "Story 2 — System failover during filing window"]
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "name": "Error Handling, Edge Cases, and Extensibility",
+      "vision": "Robustly handle errors, edge cases, and support future extensibility for additional regulatory forms and analytics.",
+      "goals": [
+        "Detect and notify on transaction data sync errors",
+        "Handle edge cases such as rapid trade succession",
+        "Support future regulatory forms beyond SEC Form 4",
+        "Enable integration with third-party compliance analytics",
+        "Maintain adaptability to regulatory changes"
+      ],
+      "success_metrics": [
+        "100% of data sync errors detected and notified within 1 minute",
+        "No filings omitted in edge case scenarios",
+        "Support for at least one additional regulatory form within 12 months",
+        "Zero critical errors during bulk trade processing",
+        "Extensibility validated by successful integration with analytics tool"
+      ],
+      "risks_and_dependencies": "Risks include unhandled edge cases, regulatory changes, and third-party integration failures. Dependencies include EquatePlus APIs, regulatory standards, and analytics tool APIs.",
+      "execution_order": 3,
+      "features": [
+        {
+          "id": "E3.F1", "name": "Transaction Data Sync Error Detection and Notification", "type": "core",
+          "purpose": "Detect failures in transaction data synchronization and notify legal users immediately.",
+          "mvp_construction": false, "component": "sync-error-monitor",
+          "stories": ["Story 1 — Receive error notification on data sync failure"]
+        },
+        {
+          "id": "E3.F2", "name": "Edge Case Handling for Rapid Trade Succession", "type": "core",
+          "purpose": "Ensure all filings are generated and submitted when multiple trades occur in rapid succession.",
+          "mvp_construction": false, "component": "bulk-trade-handler",
+          "stories": ["Story 1 — Handle multiple trades in rapid succession"]
+        },
+        {
+          "id": "E3.F3", "name": "Extensibility for Additional Regulatory Forms", "type": "enhancement",
+          "purpose": "Support additional regulatory forms such as SEC Form 5 or Form 144.",
+          "mvp_construction": false, "mvp_note": "The form-template-registry abstraction is present in the MVP code (single FORM_4 entry) so the extensibility path is real, even though Form 5/144 templates aren't built.",
+          "component": "form-template-registry",
+          "stories": ["Story 1 — Add support for new regulatory form"]
+        },
+        {
+          "id": "E3.F4", "name": "Integration with Third-Party Compliance Analytics", "type": "enhancement",
+          "purpose": "Enable integration with external analytics tools for advanced compliance reporting.",
+          "mvp_construction": false, "component": "analytics-integration",
+          "stories": ["Story 1 — Provide data to compliance analytics tool"]
+        }
+      ]
+    }
+  ]
+}

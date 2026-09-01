@@ -1,0 +1,101 @@
+{
+  "correlation_id": "C885C23C-949E-440C-8B0E-04FDD166A559",
+  "agent": "L1-requirements-nfr-classifier",
+  "phase": "1-requirements-impact-dependency",
+  "source": ["docs/sdlc/phase-1-requirements/functional-requirements.json", "docs/sdlc/phase-0-vision/vision.md (Regulatory Posture)"],
+  "nfr_classifications": [
+    {
+      "category": "performance",
+      "requirement": "Form generation latency < 5 minutes from transaction execution.",
+      "applies_to": ["FR-003"],
+      "citation": "PRD §6 Performance",
+      "status": "grounded"
+    },
+    {
+      "category": "performance",
+      "requirement": "Real-time data streaming to legal/compliance delivered within 1 minute of form generation.",
+      "applies_to": ["FR-005"],
+      "citation": "PRD §6 Performance / AC2",
+      "status": "grounded"
+    },
+    {
+      "category": "performance",
+      "requirement": "Dashboard reflects filing status changes within 1 minute.",
+      "applies_to": ["FR-015"],
+      "citation": "PRD §6 Performance",
+      "status": "grounded"
+    },
+    {
+      "category": "performance",
+      "requirement": "Export (CSV/PDF) generated and delivered within 2 minutes of request.",
+      "applies_to": ["FR-016"],
+      "citation": "PRD §5 FR9 / AC8",
+      "status": "grounded"
+    },
+    {
+      "category": "security",
+      "requirement": "All data transmissions use end-to-end encryption, TLS 1.2 or higher.",
+      "applies_to": ["FR-005", "FR-002", "FR-020"],
+      "citation": "PRD §6 Security",
+      "status": "grounded"
+    },
+    {
+      "category": "security",
+      "requirement": "Role-based access control (RBAC) enforced for all actions; authentication aligns with existing corporate SSO.",
+      "applies_to": ["FR-009", "FR-010", "FR-011", "FR-013", "FR-015"],
+      "citation": "PRD §6 Security (role-based access controls); SSO alignment specifically from PRD §7 Constraints",
+      "status": "grounded"
+    },
+    {
+      "category": "security",
+      "requirement": "Full audit logging of all actions, retained for 7 years.",
+      "applies_to": ["FR-012", "FR-013"],
+      "citation": "PRD §6 Security; retention period flagged for counsel confirmation of applicability to issuer (vs. broker-dealer) records",
+      "status": "grounded_with_open_question",
+      "note": "See vision.md Regulatory Posture — 7-year figure carried from PRD, applicability not independently verified against a specific SEC recordkeeping rule for this record type."
+    },
+    {
+      "category": "scalability",
+      "requirement": "Support up to 10,000 concurrent users and 1,000 trades/minute without degradation.",
+      "applies_to": ["FR-001", "FR-003", "FR-014"],
+      "citation": "PRD §6 Scalability",
+      "status": "grounded"
+    },
+    {
+      "category": "availability",
+      "requirement": "99.9% uptime with automated failover and backup for all critical data.",
+      "applies_to": ["all"],
+      "citation": "PRD §6 Reliability",
+      "status": "grounded"
+    },
+    {
+      "category": "compliance",
+      "requirement": "Deadline-risk calculation must use the EDGAR 5:30pm ET same-day filing cutoff, not the raw 2-business-day calendar deadline.",
+      "applies_to": ["FR-008"],
+      "citation": "vision.md Regulatory Posture #2 (sourced: SEC EDGAR filing rules, sec.gov)",
+      "status": "grounded",
+      "note": "Direct pass-through of a Phase 0 regulatory finding — compliance NFRs cite the vision's Regulatory Posture section per the blueprint's stated pattern."
+    },
+    {
+      "category": "compliance",
+      "requirement": "Form submission mechanism (direct EDGAR filer API vs. handoff to manual filing-agent process) must be confirmed before Design; system must not assume a mechanism.",
+      "applies_to": ["FR-020"],
+      "citation": "vision.md Regulatory Posture #1",
+      "status": "open_dependency"
+    },
+    {
+      "category": "usability",
+      "requirement": "Platform complies with WCAG 2.1 AA, including full keyboard navigation and screen-reader support.",
+      "applies_to": ["FR-009", "FR-010", "FR-011", "FR-015"],
+      "citation": "PRD §6 Accessibility",
+      "status": "grounded"
+    },
+    {
+      "category": "usability",
+      "requirement": "Review interface for legal/compliance users loads in under 2 seconds and supports concurrent edits.",
+      "applies_to": ["FR-009", "FR-010"],
+      "citation": "epics-from-prd.md E1.F3 NFRs",
+      "status": "grounded"
+    }
+  ]
+}

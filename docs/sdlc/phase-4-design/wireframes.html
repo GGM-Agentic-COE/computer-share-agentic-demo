@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automated Regulatory Filing Module — Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Tokens — derived from docs/design/computershare-design-system.md.
+     No formal token system exists in the source site; these are the frequency-analyzed
+     real values from that document, applied here to a data-dense application context
+     (per that document's EA11 guidance) rather than the marketing site's editorial layout. */
+  :root {
+    --brand-primary:   #93186c;
+    --brand-secondary: #432063;
+    --brand-gradient:  linear-gradient(90deg, #432063 0%, #93186c 100%);
+
+    --surface:      #ffffff;
+    --surface-alt:  #f0efef;
+    --page-bg:      #faf9f9;
+    --border:       #e2dede;
+    --border-strong:#cfc9c9;
+
+    --text:         #201a1e;
+    --text-muted:   #5c5459;
+    --text-dim:     #8e9298;
+    --text-on-brand:#ffffff;
+
+    --status-incomplete: #b91c1c;
+    --status-review:     #a0701a;
+    --status-validated:  #0f7a68;
+    --status-submitted:  #2f7d4f;
+
+    --radius-card: 24px;
+    --radius-panel: 20px;
+    --radius-pill: 100px;
+    --radius-input: 8px;
+
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 24px; --space-6: 32px; --space-7: 40px;
+
+    --shadow-card: 0 12px 16px -4px rgba(16,24,40,.08), 0 4px 6px -2px rgba(16,24,40,.03);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page-bg); color: var(--text); }
+  body {
+    font-family: 'Manrope', -apple-system, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 0 0 96px;
+  }
+  a { color: var(--brand-primary); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- Header ---------- */
+  header.doc-header {
+    background: var(--brand-gradient);
+    color: var(--text-on-brand);
+    padding: 56px 0 40px;
+    margin-bottom: 48px;
+  }
+  header.doc-header .wrap { display: flex; flex-direction: column; gap: 14px; }
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    opacity: 0.85;
+  }
+  h1 { font-size: 32px; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+  .doc-header p { margin: 0; max-width: 68ch; opacity: 0.92; font-size: 15px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12px; opacity: 0.85; margin-top: 6px; }
+
+  /* ---------- Feature section ---------- */
+  section.epic {
+    margin-bottom: 64px;
+  }
+  .epic-head {
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px;
+    border-bottom: 2px solid var(--border-strong); padding-bottom: 14px;
+  }
+  .epic-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--brand-primary); background: #f9eef5; border: 1px solid var(--brand-primary);
+    border-radius: var(--radius-pill); padding: 3px 12px; flex-shrink: 0;
+  }
+  .epic-head h2 { font-size: 21px; font-weight: 700; margin: 0; }
+  .epic-desc { color: var(--text-muted); font-size: 13.5px; margin: 10px 0 32px; max-width: 76ch; }
+
+  /* ---------- Screen card ---------- */
+  .screen-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .screen-head {
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .screen-title { font-size: 17px; font-weight: 700; }
+  .screen-route {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px; color: var(--text-dim); margin-top: 2px;
+  }
+  .feature-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--radius-pill);
+    border: 1px solid var(--border-strong); color: var(--text-muted); background: var(--surface-alt);
+    white-space: nowrap;
+  }
+  .chip.story { color: var(--brand-secondary); background: #f2edf7; border-color: #d9c7e6; }
+
+  .screen-body { padding: var(--space-6); background: var(--surface-alt); }
+
+  /* ---------- Mock frame ---------- */
+  .frame {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-panel);
+    padding: 0;
+    overflow: hidden;
+  }
+  .mock-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-3) var(--space-5); border-bottom: 2px solid var(--text);
+    font-weight: 700; font-size: 13px;
+  }
+  .mock-nav .links { display: flex; gap: var(--space-5); font-weight: 600; color: var(--text-muted); font-size: 12.5px; }
+  .mock-nav .right { display: flex; align-items: center; gap: var(--space-3); }
+  .persona-pill {
+    font-size: 11px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+    padding: 3px 10px; color: var(--text-muted); background: var(--surface-alt);
+  }
+  .bell {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
+    color: var(--brand-primary); border: 1px solid var(--brand-primary); border-radius: var(--radius-pill);
+    padding: 3px 9px; background: #f9eef5;
+  }
+  .mock-body { padding: var(--space-6); }
+
+  .btn {
+    font-family: inherit; font-weight: 700; font-size: 13px; border: none; cursor: default;
+    border-radius: var(--radius-pill); padding: 10px 22px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .proto-frame .btn { cursor: pointer; }
+  .proto-frame .btn:not([disabled]):hover { filter: brightness(0.95); }
+  .btn-primary { background: var(--brand-primary); color: var(--text-on-brand); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border-strong); }
+  .btn-disabled { background: var(--border); color: var(--text-dim); }
+
+  h3.section-label {
+    font-size: 13px; font-weight: 700; margin: var(--space-6) 0 var(--space-3);
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted);
+  }
+  h3.section-label:first-child { margin-top: 0; }
+
+  .filing-row {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    border: 1px solid var(--border); border-radius: 14px; padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+  .filing-row .meta { font-size: 13px; }
+  .filing-row .meta .sub { color: var(--text-dim); font-size: 11.5px; margin-top: 2px; }
+
+  .status-pill {
+    font-size: 11px; font-weight: 700; border-radius: var(--radius-pill); padding: 3px 11px;
+    border: 1px solid; white-space: nowrap;
+  }
+  .status-incomplete { color: var(--status-incomplete); border-color: var(--status-incomplete); background: #fdeeee; }
+  .status-review     { color: var(--status-review);     border-color: var(--status-review);     background: #fbf2e4; }
+  .status-validated  { color: var(--status-validated);  border-color: var(--status-validated);  background: #e8f6f2; }
+  .status-submitted  { color: var(--status-submitted);  border-color: var(--status-submitted);  background: #ecf6ef; }
+
+  .risk-banner {
+    display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--status-incomplete);
+    background: #fdeeee; border: 1px solid var(--status-incomplete); border-radius: 10px;
+    padding: 6px 10px; margin-top: 6px;
+  }
+  .risk-banner svg { flex-shrink: 0; }
+
+  table.dash-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.dash-table th {
+    text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--text-dim); padding: 0 var(--space-3) var(--space-2); border-bottom: 2px solid var(--border);
+    font-weight: 700;
+  }
+  table.dash-table td { padding: var(--space-3); border-bottom: 1px solid var(--border); vertical-align: middle; }
+  table.dash-table tr:last-child td { border-bottom: none; }
+  .filter-bar { display: flex; gap: var(--space-3); margin-bottom: var(--space-4); flex-wrap: wrap; }
+  .fake-input, .fake-select {
+    border: 1px solid var(--border-strong); border-radius: var(--radius-input); padding: 8px 12px;
+    font-size: 12.5px; color: var(--text-muted); background: var(--surface);
+  }
+
+  dl.field-list { display: grid; grid-template-columns: 160px 1fr; row-gap: var(--space-3); column-gap: var(--space-4); margin: 0; }
+  dl.field-list dt { font-size: 12px; color: var(--text-dim); font-weight: 600; padding-top: 8px; }
+  dl.field-list dd { margin: 0; }
+  .fake-field {
+    border: 1px solid var(--border-strong); border-radius: var(--radius-input); padding: 8px 12px;
+    font-size: 13px; background: var(--surface); display: inline-block; min-width: 160px;
+  }
+  .fake-field.error { border-color: var(--status-incomplete); }
+  .field-error { color: var(--status-incomplete); font-size: 11.5px; margin-top: 4px; }
+  .readonly-field { color: var(--text-muted); padding-top: 8px; font-size: 13px; }
+
+  .notif-drawer {
+    max-width: 320px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-panel); box-shadow: var(--shadow-card); padding: var(--space-4);
+  }
+  .notif-drawer .title { font-weight: 700; font-size: 13px; margin-bottom: var(--space-2); }
+  .notif-item { padding: var(--space-2) 0; border-top: 1px solid var(--border); font-size: 12.5px; }
+  .notif-item:first-of-type { border-top: none; }
+  .notif-type {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--brand-secondary); display: block; margin-bottom: 2px;
+  }
+
+  .annotation {
+    background: #f9eef5; border: 1px solid #e4c9d8; border-radius: 10px;
+    padding: var(--space-3) var(--space-4); margin-top: var(--space-4);
+    font-size: 12.5px; color: var(--brand-secondary); line-height: 1.55;
+  }
+  .annotation b { color: var(--brand-primary); }
+
+  /* ---------- Legend ---------- */
+  .legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+  .legend-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: var(--space-4); font-size: 12.5px;
+  }
+  .legend-item .lk { font-weight: 700; margin-bottom: 6px; display: block; }
+
+  /* ---------- Interactive prototype ---------- */
+  .proto-frame { position: relative; }
+  .proto-nav-link {
+    background: none; border: none; font: inherit; font-weight: 600; font-size: 12.5px;
+    color: var(--text-muted); cursor: pointer; padding: 0;
+  }
+  .proto-nav-link.active { color: var(--brand-primary); }
+  .proto-nav-link:focus-visible, .btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--brand-primary); outline-offset: 2px;
+  }
+  .clickable-row { cursor: pointer; transition: background .12s ease; }
+  .clickable-row:hover { background: var(--surface-alt); }
+  .btn[disabled] { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
+  input.live-field {
+    font-family: inherit; font-size: 13px; border: 1px solid var(--border-strong);
+    border-radius: var(--radius-input); padding: 8px 12px; width: 160px; background: var(--surface); color: var(--text);
+  }
+  input.live-field.error { border-color: var(--status-incomplete); }
+  select.live-select, input.live-search {
+    font-family: inherit; border: 1px solid var(--border-strong); border-radius: var(--radius-input);
+    padding: 8px 12px; font-size: 12.5px; color: var(--text); background: var(--surface);
+  }
+  .proto-bell-btn {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700;
+    color: var(--brand-primary); border: 1px solid var(--brand-primary); border-radius: var(--radius-pill);
+    padding: 3px 9px; background: #f9eef5; cursor: pointer; font-family: inherit;
+  }
+  .proto-drawer {
+    position: absolute; top: 46px; right: var(--space-5); width: 300px; z-index: 20;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-card); padding: var(--space-4);
+  }
+  .proto-drawer .close-x {
+    float: right; background: none; border: none; font-size: 15px; cursor: pointer; color: var(--text-dim); line-height: 1;
+  }
+  .live-toast {
+    font-size: 12.5px; padding: 8px 12px; border-radius: 10px; margin-bottom: var(--space-3);
+    background: #e8f6f2; color: var(--status-validated); border: 1px solid var(--status-validated);
+  }
+  .proto-back { background: none; border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+    padding: 8px 16px; font: inherit; font-weight: 700; font-size: 13px; cursor: pointer; color: var(--text); }
+
+  footer.doc-footer {
+    max-width: 1180px; margin: 0 auto; padding: 0 28px; color: var(--text-dim); font-size: 11.5px;
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 40px; line-height: 1.7;
+  }
+  footer.doc-footer code {
+    font-family: ui-monospace, Menlo, monospace; background: var(--surface-alt);
+    border: 1px solid var(--border); border-radius: 4px; padding: 0 4px;
+  }
+</style>
+</head>
+<body>
+
+  <header class="doc-header">
+    <div class="wrap">
+      <span class="eyebrow">Phase 4 · Design — L1-design-ux-wireframe</span>
+      <h1>Automated Regulatory Filing Module — Wireframes</h1>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <section class="epic">
+      <div class="epic-head">
+        <span class="epic-tag">Live</span>
+        <h2>Interactive Prototype</h2>
+      </div>
+      <p class="epic-desc">
+        Click through the golden path with fake local data, entirely in this page — no real API calls.
+        Simulate a trade as the executive, switch persona, review/edit/approve as Legal &amp; Compliance,
+        watch notifications and the audit trail update. Resets on page reload.
+      </p>
+      <div class="screen-card">
+        <div class="screen-head">
+          <div>
+            <div class="screen-title" id="proto-screen-title">Executive Home</div>
+            <div class="screen-route" id="proto-screen-route">/</div>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="frame proto-frame">
+            <div class="mock-nav">
+              <span>Regulatory Filing</span>
+              <span class="links">
+                <button class="proto-nav-link" id="proto-nav-home" onclick="protoGo('home')" type="button">Executive Home</button>
+                <button class="proto-nav-link" id="proto-nav-dashboard" onclick="protoGo('dashboard')" type="button">Compliance Dashboard</button>
+              </span>
+              <span class="right">
+                <select class="live-select" id="proto-persona" onchange="protoSwitchPersona(this.value)" aria-label="Switch persona">
+                  <option value="exec-1">J. Alvarez (Executive)</option>
+                  <option value="exec-2">R. Chen (Executive)</option>
+                  <option value="legal-1">S. Kapoor (Legal &amp; Compliance)</option>
+                </select>
+                <span style="position:relative;">
+                  <button class="proto-bell-btn" onclick="protoToggleDrawer()" type="button" id="proto-bell">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.2-.6 1.7L5 15.5c-.7.9-.1 2.2 1 2.2h12c1.1 0 1.7-1.3 1-2.2l-1.4-1.6a2.7 2.7 0 0 1-.6-1.7V8a5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.6"/></svg>
+                    <span id="proto-bell-count">0</span>
+                  </button>
+                  <div class="proto-drawer" id="proto-drawer" style="display:none;">
+                    <button class="close-x" onclick="protoToggleDrawer()" aria-label="Close notifications" type="button">&times;</button>
+                    <div class="title" style="font-weight:700; font-size:13px; margin-bottom:8px;">Notifications</div>
+                    <div id="proto-drawer-list"></div>
+                  </div>
+                </span>
+              </span>
+            </div>
+            <div class="mock-body" id="proto-body"><!-- rendered by JS --></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="epic">
+      <div class="epic-head">
+        <span class="epic-tag">E1</span>
+        <h2>Automated Regulatory Form Generation and Submission</h2>
+      </div>
+      <p class="epic-desc">Screens covering trade simulation, form generation visibility, and the legal review/edit/approve workflow.</p>
+
+      <!-- Screen: Executive Home -->
+      <div class="screen-card">
+        <div class="screen-head">
+          <div>
+            <div class="screen-title">Executive Home</div>
+            <div class="screen-route">/  ·  ExecutiveHome.tsx</div>
+          </div>
+          <div class="feature-chips">
+            <span class="chip">E1.F1</span>
+            <span class="chip">E1.F4</span>
+            <span class="chip story">E1.F1-S1</span>
+            <span class="chip story">E1.F4-S1</span>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="frame">
+            <div class="mock-nav">
+              <span>Regulatory Filing</span>
+              <span class="links"><span>Executive Home</span><span>Compliance Dashboard</span></span>
+              <span class="right">
+                <span class="persona-pill">J. Alvarez (Executive)</span>
+                <span class="bell">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.2-.6 1.7L5 15.5c-.7.9-.1 2.2 1 2.2h12c1.1 0 1.7-1.3 1-2.2l-1.4-1.6a2.7 2.7 0 0 1-.6-1.7V8a5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.6"/></svg>
+                  2
+                </span>
+              </span>
+            </div>
+            <div class="mock-body">
+              <button class="btn btn-primary" type="button">Simulate Trade</button>
+
+              <h3 class="section-label">My Filings</h3>
+              <div class="filing-row">
+                <div class="meta">
+                  Form 4 · 2026-08-28 · 1,200 sh @ $42.10
+                  <div class="sub">Generated · reviewed by Legal &amp; Compliance</div>
+                </div>
+                <span class="status-pill status-submitted">Submitted</span>
+              </div>
+              <div class="filing-row">
+                <div class="meta">
+                  Form 4 · 2026-08-30 · 350 sh @ $18.75
+                  <div class="sub">Awaiting legal review</div>
+                </div>
+                <span class="status-pill status-review">Under Review</span>
+              </div>
+              <div class="risk-banner">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 4L2 20h20L12 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <line x1="12" y1="10" x2="12" y2="14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="12" cy="17.2" r="1" fill="currentColor"/>
+                </svg>
+                Deadline risk: 9h remaining before the EDGAR same-day cutoff
+              </div>
+            </div>
+          </div>
+          <div class="annotation">
+            <b>E1.F1-S1 / E1.F1-S3:</b> "Simulate Trade" stands in for a real EquatePlus transaction-executed event
+            (see hld.md §8, gap #4). A generation that hits the "missing required field" path (E1.F1-S3) is not
+            reachable from this button today — see user-flows.md Flow 4 for that gap. <b>E1.F4-S1:</b> filings list is
+            server-scoped to the authenticated executive regardless of any client state.
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen: Filing Review -->
+      <div class="screen-card">
+        <div class="screen-head">
+          <div>
+            <div class="screen-title">Filing Review</div>
+            <div class="screen-route">/filings/:id  ·  FilingReview.tsx</div>
+          </div>
+          <div class="feature-chips">
+            <span class="chip">E1.F2</span>
+            <span class="chip">E1.F3</span>
+            <span class="chip story">E1.F2-S1</span>
+            <span class="chip story">E1.F3-S1</span>
+            <span class="chip story">E1.F3-S2</span>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="frame">
+            <div class="mock-nav">
+              <span>Regulatory Filing</span>
+              <span class="links"><span>Executive Home</span><span>Compliance Dashboard</span></span>
+              <span class="right">
+                <span class="persona-pill">S. Kapoor (Legal &amp; Compliance)</span>
+                <span class="bell">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.2-.6 1.7L5 15.5c-.7.9-.1 2.2 1 2.2h12c1.1 0 1.7-1.3 1-2.2l-1.4-1.6a2.7 2.7 0 0 1-.6-1.7V8a5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.6"/></svg>
+                  1
+                </span>
+              </span>
+            </div>
+            <div class="mock-body">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom: var(--space-5);">
+                <button class="btn btn-ghost" type="button">← Back</button>
+                <span style="font-weight:700; font-size:15px;">Form 4 — exec-2 · 2026-08-30</span>
+                <span class="status-pill status-review">Under Review</span>
+              </div>
+
+              <dl class="field-list">
+                <dt>Issuer</dt><dd class="readonly-field">Ascendion INC — Demo Issuer</dd>
+                <dt>Reporting Person</dt><dd class="readonly-field">R. Chen</dd>
+                <dt>Transaction Code</dt><dd class="readonly-field">S</dd>
+                <dt>Shares</dt>
+                <dd>
+                  <span class="fake-field error">0</span>
+                  <div class="field-error">shares: must be greater than 0</div>
+                </dd>
+                <dt>Price per share</dt><dd><span class="fake-field">18.75</span></dd>
+              </dl>
+
+              <div style="margin-top: var(--space-6); display:flex; gap: var(--space-3);">
+                <button class="btn btn-primary" type="button">Save Edits</button>
+                <button class="btn btn-disabled" type="button">Approve &amp; Submit</button>
+              </div>
+
+              <h3 class="section-label" style="margin-top: var(--space-6);">Audit Trail</h3>
+              <div class="filing-row" style="border-style: dashed;">
+                <div class="meta" style="font-size:12px;">
+                  2026-08-30 14:02 — GENERATED by exec-2: Form 4 generated from simulated trade.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="annotation">
+            <b>E1.F2-S1:</b> field-level validation error rendered inline, sourced from the server's
+            <code style="background:transparent;">validationErrors</code>, not a client-only rule. <b>E1.F3-S1/S2:</b> Approve is
+            disabled until status is <code style="background:transparent;">VALIDATED</code> — a real
+            <code style="background:transparent;">disabled</code> attribute, not a CSS-only visual state.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="epic">
+      <div class="epic-head">
+        <span class="epic-tag">E2</span>
+        <h2>Real-Time Data Streaming, Notifications, and Monitoring</h2>
+      </div>
+      <p class="epic-desc">Screens covering compliance-wide monitoring and the notification surface shared by both personas.</p>
+
+      <!-- Screen: Compliance Dashboard -->
+      <div class="screen-card">
+        <div class="screen-head">
+          <div>
+            <div class="screen-title">Compliance Dashboard</div>
+            <div class="screen-route">/dashboard  ·  ComplianceDashboard.tsx</div>
+          </div>
+          <div class="feature-chips">
+            <span class="chip">E2.F3</span>
+            <span class="chip story">E2.F3-S1</span>
+            <span class="chip story">E2.F3-S2</span>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="frame">
+            <div class="mock-nav">
+              <span>Regulatory Filing</span>
+              <span class="links"><span>Executive Home</span><span>Compliance Dashboard</span></span>
+              <span class="right">
+                <span class="persona-pill">S. Kapoor (Legal &amp; Compliance)</span>
+                <span class="bell">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.2-.6 1.7L5 15.5c-.7.9-.1 2.2 1 2.2h12c1.1 0 1.7-1.3 1-2.2l-1.4-1.6a2.7 2.7 0 0 1-.6-1.7V8a5 5 0 0 0-5-5z" stroke="currentColor" stroke-width="1.6"/></svg>
+                  1
+                </span>
+              </span>
+            </div>
+            <div class="mock-body">
+              <div class="filter-bar">
+                <span class="fake-select">Status: All ▾</span>
+                <span class="fake-input">Search issuer or executive…</span>
+              </div>
+              <table class="dash-table">
+                <thead>
+                  <tr><th>Executive</th><th>Form</th><th>Status</th><th>Deadline (EDGAR cutoff)</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>exec-2</td><td>FORM_4</td>
+                    <td><span class="status-pill status-review">Under Review</span></td>
+                    <td>2026-08-31 21:30 UTC</td>
+                  </tr>
+                  <tr>
+                    <td>exec-1</td><td>FORM_4</td>
+                    <td><span class="status-pill status-validated">Validated</span></td>
+                    <td>2026-09-01 21:30 UTC</td>
+                  </tr>
+                  <tr>
+                    <td>exec-3</td><td>FORM_4</td>
+                    <td><span class="status-pill status-submitted">Submitted</span></td>
+                    <td>—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="annotation">
+            <b>E2.F3-S1:</b> rows sorted client-side by <code style="background:transparent;">edgarCutoffAt</code> ascending — the
+            most time-critical filing is always nearest the top, not sorted by creation date. <b>E2.F3-S2:</b> error-status
+            filings (not shown in this sample data) render with <code style="background:transparent;">status-incomplete</code>
+            styling using the same non-color-only badge pattern.
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen: Notifications panel -->
+      <div class="screen-card">
+        <div class="screen-head">
+          <div>
+            <div class="screen-title">Notifications Panel</div>
+            <div class="screen-route">Overlay, all screens  ·  NotificationBell.tsx</div>
+          </div>
+          <div class="feature-chips">
+            <span class="chip">E2.F2</span>
+            <span class="chip story">E2.F2-S1</span>
+            <span class="chip story">E2.F2-S2</span>
+            <span class="chip story">E2.F2-S3</span>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="notif-drawer">
+            <div class="title">Notifications</div>
+            <div class="notif-item">
+              <span class="notif-type">Deadline Risk</span>
+              Deadline risk: your Form 4 filing is due soon and has not been submitted.
+            </div>
+            <div class="notif-item">
+              <span class="notif-type">Form Generated</span>
+              Form 4 generated for your 2026-08-30 trade — under legal review.
+            </div>
+            <div class="notif-item">
+              <span class="notif-type">Submitted</span>
+              Your Form 4 has been submitted (confirmation MOCK-EDGAR-81E0D4BB).
+            </div>
+          </div>
+          <div class="annotation">
+            <b>E2.F2-S1/S2/S3:</b> one shared drawer component renders all three notification types identically today —
+            see user-flows.md Flow 4's accessibility note on distinguishing urgent vs. routine items, a real gap, not
+            hidden here.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section class="epic">
+      <div class="epic-head">
+        <span class="epic-tag">Ref</span>
+        <h2>Component Legend</h2>
+      </div>
+      <p class="epic-desc">Every visual pattern used above, and the token it maps to.</p>
+      <div class="legend-grid">
+        <div class="legend-item">
+          <span class="lk">Status pill</span>
+          Text-labeled, not color-only (WCAG). <code>status-incomplete</code> / <code>status-review</code> /
+          <code>status-validated</code> / <code>status-submitted</code> map to the four real <code>FilingStatus</code> values.
+        </div>
+        <div class="legend-item">
+          <span class="lk">Primary button</span>
+          <code>--brand-primary</code> (#93186c), pill radius (100px) — matches the real site's <code>.login-button</code>
+          and toggle-button radius pattern.
+        </div>
+        <div class="legend-item">
+          <span class="lk">Card / panel radius</span>
+          24px for cards, 20px for panels/overlays — the dominant radii found in the source CSS frequency analysis.
+        </div>
+        <div class="legend-item">
+          <span class="lk">Icons</span>
+          Inline SVG only (bell, warning triangle) — no emoji anywhere in this document or the product UI, per EA11.
+        </div>
+        <div class="legend-item">
+          <span class="lk">Typography</span>
+          Manrope throughout — the single face found across the entire source site.
+        </div>
+        <div class="legend-item">
+          <span class="lk">Annotation box</span>
+          Documents a real behavior or a known gap directly on the wireframe — not decorative, encodes traceability
+          back to user-flows.md.
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="doc-footer">
+    Source screens: <code>ui/src/pages/ExecutiveHome.tsx</code>, <code>ComplianceDashboard.tsx</code>,
+    <code>FilingReview.tsx</code>, <code>ui/src/components/NotificationBell.tsx</code>. Design tokens:
+    <code>docs/design/computershare-design-system.md</code>. Flow detail: <code>docs/sdlc/phase-4-design/user-flows.md</code>.
+    The Interactive Prototype above runs on fake local data via vanilla JS, entirely client-side — it never calls the
+    real API. The per-epic reference cards below it are static, hand-built HTML/CSS annotated with feature/story IDs;
+    layouts mirror the real app but nothing in them is wired up.
+  </footer>
+
+<script>
+(function () {
+  var USERS = {
+    'exec-1': { id: 'exec-1', name: 'J. Alvarez', role: 'EXECUTIVE' },
+    'exec-2': { id: 'exec-2', name: 'R. Chen', role: 'EXECUTIVE' },
+    'legal-1': { id: 'legal-1', name: 'S. Kapoor', role: 'LEGAL_COMPLIANCE' }
+  };
+
+  var state = {
+    screen: 'home',
+    personaId: 'exec-1',
+    reviewFilingId: null,
+    nextId: 1,
+    filings: [
+      { id: 'f1', executiveId: 'exec-1', issuer: 'Ascendion INC — Demo Issuer', reportingPerson: 'J. Alvarez',
+        transactionDate: '2026-08-28', transactionCode: 'S', shares: 1200, pricePerShare: 42.10,
+        status: 'SUBMITTED', errors: [], audit: [
+          { action: 'GENERATED', actor: 'exec-1', detail: 'Form 4 generated from simulated trade.' },
+          { action: 'APPROVED', actor: 'legal-1', detail: 'Approved by legal & compliance.' },
+          { action: 'SUBMITTED', actor: 'legal-1', detail: 'Mock EDGAR submission confirmation: MOCK-EDGAR-F1000001' }
+        ] },
+      { id: 'f2', executiveId: 'exec-2', issuer: 'Ascendion INC — Demo Issuer', reportingPerson: 'R. Chen',
+        transactionDate: '2026-08-30', transactionCode: 'S', shares: 0, pricePerShare: 18.75,
+        status: 'UNDER_REVIEW', errors: ['shares: must be greater than 0'], audit: [
+          { action: 'GENERATED', actor: 'exec-2', detail: 'Form 4 generated from simulated trade.' }
+        ] }
+    ],
+    notifications: [
+      { type: 'SUBMITTED', userId: 'exec-1', message: 'Your Form 4 has been submitted (confirmation MOCK-EDGAR-F1000001).' },
+      { type: 'FORM_GENERATED', userId: 'exec-2', message: 'Form 4 generated for your 2026-08-30 trade — under legal review.' }
+    ],
+    drawerOpen: false
+  };
+
+  function currentUser() { return USERS[state.personaId]; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  }); }
+  function statusLabel(s) {
+    return { INCOMPLETE: 'Incomplete', UNDER_REVIEW: 'Under Review', VALIDATED: 'Validated', SUBMITTED: 'Submitted' }[s];
+  }
+  function statusClass(s) {
+    return { INCOMPLETE: 'status-incomplete', UNDER_REVIEW: 'status-review', VALIDATED: 'status-validated', SUBMITTED: 'status-submitted' }[s];
+  }
+  function findFiling(id) { for (var i = 0; i < state.filings.length; i++) if (state.filings[i].id === id) return state.filings[i]; return null; }
+  function notify(userId, type, message) { state.notifications.unshift({ userId: userId, type: type, message: message }); }
+  function warningSvg() {
+    return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+      '<path d="M12 4L2 20h20L12 4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' +
+      '<line x1="12" y1="10" x2="12" y2="14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+      '<circle cx="12" cy="17.2" r="1" fill="currentColor"/></svg>';
+  }
+
+  window.protoGo = function (screen) {
+    state.screen = screen;
+    state.reviewFilingId = null;
+    render();
+  };
+  window.protoOpenReview = function (id) {
+    state.screen = 'review';
+    state.reviewFilingId = id;
+    render();
+  };
+  window.protoSwitchPersona = function (id) {
+    state.personaId = id;
+    if (state.screen === 'review') { state.screen = 'home'; state.reviewFilingId = null; }
+    render();
+  };
+  window.protoToggleDrawer = function () {
+    state.drawerOpen = !state.drawerOpen;
+    render();
+  };
+  window.protoSimulateTrade = function () {
+    var u = currentUser();
+    var id = 'f' + (100 + (++state.nextId));
+    var shares = 100 + Math.round(Math.random() * 800);
+    var price = Math.round((10 + Math.random() * 80) * 100) / 100;
+    var filing = {
+      id: id, executiveId: u.id, issuer: 'Ascendion INC — Demo Issuer', reportingPerson: u.name,
+      transactionDate: '2026-09-01', transactionCode: 'S', shares: shares, pricePerShare: price,
+      status: 'VALIDATED', errors: [],
+      audit: [{ action: 'GENERATED', actor: u.id, detail: 'Form 4 generated from simulated trade.' }]
+    };
+    state.filings.unshift(filing);
+    notify(u.id, 'FORM_GENERATED', 'Form 4 generated for your ' + filing.transactionDate + ' trade — under legal review.');
+    render();
+  };
+  window.protoSaveEdits = function (id) {
+    var f = findFiling(id);
+    var sharesEl = document.getElementById('proto-shares');
+    var priceEl = document.getElementById('proto-price');
+    var shares = parseInt(sharesEl.value, 10);
+    var price = parseFloat(priceEl.value);
+    var errors = [];
+    if (!(shares > 0)) errors.push('shares: must be greater than 0');
+    if (!(price >= 0)) errors.push('pricePerShare: must be greater than or equal to 0');
+    f.shares = isNaN(shares) ? f.shares : shares;
+    f.pricePerShare = isNaN(price) ? f.pricePerShare : price;
+    f.errors = errors;
+    f.status = errors.length ? 'UNDER_REVIEW' : 'VALIDATED';
+    if (!errors.length) f.audit.push({ action: 'EDITED', actor: currentUser().id, detail: 'Fields updated: shares, pricePerShare' });
+    render();
+  };
+  window.protoApprove = function (id) {
+    var f = findFiling(id);
+    if (f.status !== 'VALIDATED') return;
+    var confirmationId = 'MOCK-EDGAR-' + id.toUpperCase();
+    f.audit.push({ action: 'APPROVED', actor: currentUser().id, detail: 'Approved by legal & compliance.' });
+    f.status = 'SUBMITTED';
+    f.audit.push({ action: 'SUBMITTED', actor: currentUser().id, detail: 'Mock EDGAR submission confirmation: ' + confirmationId });
+    notify(f.executiveId, 'SUBMITTED', 'Your Form 4 has been submitted (confirmation ' + confirmationId + ').');
+    notify(currentUser().id, 'SUBMITTED', 'Form 4 for filing ' + id + ' has been submitted.');
+    render();
+  };
+  window.protoFilterDashboard = function () { render(); };
+  window.protoToggleAudit = function () {
+    var el = document.getElementById('proto-audit-list');
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  };
+
+  function renderHome() {
+    var u = currentUser();
+    var mine = state.filings.filter(function (f) { return f.executiveId === u.id; });
+    var rows = mine.map(function (f) {
+      var risk = '';
+      if (f.status !== 'SUBMITTED') {
+        risk = '<div class="risk-banner">' + warningSvg() + ' Deadline risk: 9h remaining before the EDGAR same-day cutoff</div>';
+      }
+      return '<div class="filing-row clickable-row" onclick="protoOpenReview(\'' + f.id + '\')" tabindex="0">' +
+        '<div class="meta">Form 4 · ' + esc(f.transactionDate) + ' · ' + f.shares + ' sh @ $' + f.pricePerShare.toFixed(2) +
+        '<div class="sub">' + (f.status === 'SUBMITTED' ? 'Submitted' : 'Awaiting legal review') + '</div>' + risk + '</div>' +
+        '<span class="status-pill ' + statusClass(f.status) + '">' + statusLabel(f.status) + '</span></div>';
+    }).join('') || '<p style="color:var(--text-dim); font-size:13px;">No filings yet — simulate a trade to get started.</p>';
+
+    return '<button class="btn btn-primary" type="button" onclick="protoSimulateTrade()">Simulate Trade</button>' +
+      '<h3 class="section-label">My Filings</h3>' + rows;
+  }
+
+  function renderDashboard() {
+    var statusFilter = (document.getElementById('proto-status-filter') || {}).value || '';
+    var search = ((document.getElementById('proto-search') || {}).value || '').toLowerCase();
+    var rows = state.filings.filter(function (f) {
+      if (statusFilter && f.status !== statusFilter) return false;
+      if (search && f.executiveId.toLowerCase().indexOf(search) === -1 && f.issuer.toLowerCase().indexOf(search) === -1) return false;
+      return true;
+    }).sort(function (a, b) { return a.status === 'SUBMITTED' ? 1 : (b.status === 'SUBMITTED' ? -1 : 0); });
+
+    var body = rows.map(function (f) {
+      return '<tr class="clickable-row" onclick="protoOpenReview(\'' + f.id + '\')" tabindex="0">' +
+        '<td>' + esc(f.executiveId) + '</td><td>FORM_4</td>' +
+        '<td><span class="status-pill ' + statusClass(f.status) + '">' + statusLabel(f.status) + '</span></td>' +
+        '<td>' + esc(f.transactionDate) + '</td></tr>';
+    }).join('') || '<tr><td colspan="4" style="color:var(--text-dim);">No filings match this filter.</td></tr>';
+
+    return '<div class="filter-bar">' +
+      '<select class="live-select" id="proto-status-filter" onchange="protoFilterDashboard()" aria-label="Filter by status">' +
+      '<option value="">Status: All</option><option value="INCOMPLETE">Incomplete</option><option value="UNDER_REVIEW">Under Review</option>' +
+      '<option value="VALIDATED">Validated</option><option value="SUBMITTED">Submitted</option></select>' +
+      '<input class="live-search" id="proto-search" oninput="protoFilterDashboard()" placeholder="Search issuer or executive…" aria-label="Search" /></div>' +
+      '<table class="dash-table"><thead><tr><th>Executive</th><th>Form</th><th>Status</th><th>Date</th></tr></thead><tbody>' + body + '</tbody></table>';
+  }
+
+  function renderReview(id) {
+    var f = findFiling(id);
+    if (!f) return '<p>Filing not found.</p>';
+    var errShares = f.errors.filter(function (e) { return e.indexOf('shares') === 0; })[0];
+    var errPrice = f.errors.filter(function (e) { return e.indexOf('pricePerShare') === 0; })[0];
+    var auditRows = f.audit.map(function (a) {
+      return '<li>' + a.action + ' by ' + esc(a.actor) + ': ' + esc(a.detail) + '</li>';
+    }).join('');
+
+    return '<button class="proto-back" type="button" onclick="protoGo(\'dashboard\')">&larr; Back</button>' +
+      '<div style="display:flex; align-items:center; gap:10px; margin: var(--space-4) 0 var(--space-5);">' +
+      '<span style="font-weight:700; font-size:15px;">Form 4 — ' + esc(f.executiveId) + ' · ' + esc(f.transactionDate) + '</span>' +
+      '<span class="status-pill ' + statusClass(f.status) + '">' + statusLabel(f.status) + '</span></div>' +
+      '<dl class="field-list">' +
+      '<dt>Issuer</dt><dd class="readonly-field">' + esc(f.issuer) + '</dd>' +
+      '<dt>Reporting Person</dt><dd class="readonly-field">' + esc(f.reportingPerson) + '</dd>' +
+      '<dt>Transaction Code</dt><dd class="readonly-field">' + esc(f.transactionCode) + '</dd>' +
+      '<dt><label for="proto-shares">Shares</label></dt><dd>' +
+      '<input class="live-field' + (errShares ? ' error' : '') + '" id="proto-shares" value="' + f.shares + '" /> ' +
+      (errShares ? '<div class="field-error">' + esc(errShares) + '</div>' : '') + '</dd>' +
+      '<dt><label for="proto-price">Price per share</label></dt><dd>' +
+      '<input class="live-field' + (errPrice ? ' error' : '') + '" id="proto-price" value="' + f.pricePerShare + '" /> ' +
+      (errPrice ? '<div class="field-error">' + esc(errPrice) + '</div>' : '') + '</dd>' +
+      '</dl>' +
+      '<div style="margin-top: var(--space-6); display:flex; gap: var(--space-3);">' +
+      '<button class="btn btn-primary" type="button" onclick="protoSaveEdits(\'' + f.id + '\')">Save Edits</button>' +
+      '<button class="btn' + (f.status === 'VALIDATED' ? ' btn-primary' : '') + '" type="button" onclick="protoApprove(\'' + f.id + '\')" ' +
+      (f.status === 'VALIDATED' ? '' : 'disabled') + '>Approve &amp; Submit</button></div>' +
+      '<button class="btn btn-ghost" type="button" style="margin-top:var(--space-6);" onclick="protoToggleAudit()">Show/Hide audit trail</button>' +
+      '<ul id="proto-audit-list" style="display:none; font-size:12px; margin-top:8px;">' + auditRows + '</ul>';
+  }
+
+  function render() {
+    document.getElementById('proto-nav-home').className = 'proto-nav-link' + (state.screen === 'home' ? ' active' : '');
+    document.getElementById('proto-nav-dashboard').className = 'proto-nav-link' + (state.screen === 'dashboard' ? ' active' : '');
+    document.getElementById('proto-persona').value = state.personaId;
+
+    var titleEl = document.getElementById('proto-screen-title');
+    var routeEl = document.getElementById('proto-screen-route');
+    var body;
+    if (state.screen === 'review') {
+      titleEl.textContent = 'Filing Review';
+      routeEl.textContent = '/filings/' + state.reviewFilingId;
+      body = renderReview(state.reviewFilingId);
+    } else if (state.screen === 'dashboard') {
+      titleEl.textContent = 'Compliance Dashboard';
+      routeEl.textContent = '/dashboard';
+      body = renderDashboard();
+    } else {
+      titleEl.textContent = 'Executive Home';
+      routeEl.textContent = '/';
+      body = renderHome();
+    }
+    document.getElementById('proto-body').innerHTML = body;
+
+    var mine = state.notifications.filter(function (n) { return n.userId === currentUser().id; });
+    document.getElementById('proto-bell-count').textContent = mine.length;
+    document.getElementById('proto-drawer').style.display = state.drawerOpen ? 'block' : 'none';
+    document.getElementById('proto-drawer-list').innerHTML = mine.map(function (n) {
+      return '<div class="notif-item"><span class="notif-type">' + n.type.replace('_', ' ') + '</span>' + esc(n.message) + '</div>';
+    }).join('') || '<div class="notif-item">No notifications.</div>';
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
