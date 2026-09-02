@@ -36,11 +36,34 @@ public class Filing {
     private FilingStatus status;
 
     private String issuer;
+    private String issuerTicker;
+
     private String reportingPerson;
+    private String reportingPersonLast;
+    private String reportingPersonFirst;
+    private String reportingPersonMiddle;
+    private String reportingPersonStreet;
+    private String reportingPersonCity;
+    private String reportingPersonState;
+    private String reportingPersonZip;
+
+    private boolean relationshipDirector;
+    private boolean relationshipOfficer;
+    private boolean relationshipTenPercentOwner;
+    private boolean relationshipOther;
+    private String officerTitle;
+
+    private String titleOfSecurity;
     private LocalDate transactionDate;
     private String transactionCode;
+    private String acquiredOrDisposed;
     private Integer shares;
     private Double pricePerShare;
+    private Integer sharesOwnedFollowingTransaction;
+    private String ownershipForm;
+
+    private String signedBy;
+    private Instant signedAt;
 
     // EAGER: this entity is serialized directly to JSON outside an open Hibernate session
     // (open-in-view is disabled — see application.yml), so a LAZY collection would throw on
@@ -132,6 +155,158 @@ public class Filing {
 
     public void setPricePerShare(Double pricePerShare) {
         this.pricePerShare = pricePerShare;
+    }
+
+    public String getIssuerTicker() {
+        return issuerTicker;
+    }
+
+    public void setIssuerTicker(String issuerTicker) {
+        this.issuerTicker = issuerTicker;
+    }
+
+    public String getReportingPersonLast() {
+        return reportingPersonLast;
+    }
+
+    public void setReportingPersonLast(String reportingPersonLast) {
+        this.reportingPersonLast = reportingPersonLast;
+    }
+
+    public String getReportingPersonFirst() {
+        return reportingPersonFirst;
+    }
+
+    public void setReportingPersonFirst(String reportingPersonFirst) {
+        this.reportingPersonFirst = reportingPersonFirst;
+    }
+
+    public String getReportingPersonMiddle() {
+        return reportingPersonMiddle;
+    }
+
+    public void setReportingPersonMiddle(String reportingPersonMiddle) {
+        this.reportingPersonMiddle = reportingPersonMiddle;
+    }
+
+    public String getReportingPersonStreet() {
+        return reportingPersonStreet;
+    }
+
+    public void setReportingPersonStreet(String reportingPersonStreet) {
+        this.reportingPersonStreet = reportingPersonStreet;
+    }
+
+    public String getReportingPersonCity() {
+        return reportingPersonCity;
+    }
+
+    public void setReportingPersonCity(String reportingPersonCity) {
+        this.reportingPersonCity = reportingPersonCity;
+    }
+
+    public String getReportingPersonState() {
+        return reportingPersonState;
+    }
+
+    public void setReportingPersonState(String reportingPersonState) {
+        this.reportingPersonState = reportingPersonState;
+    }
+
+    public String getReportingPersonZip() {
+        return reportingPersonZip;
+    }
+
+    public void setReportingPersonZip(String reportingPersonZip) {
+        this.reportingPersonZip = reportingPersonZip;
+    }
+
+    public boolean isRelationshipDirector() {
+        return relationshipDirector;
+    }
+
+    public void setRelationshipDirector(boolean relationshipDirector) {
+        this.relationshipDirector = relationshipDirector;
+    }
+
+    public boolean isRelationshipOfficer() {
+        return relationshipOfficer;
+    }
+
+    public void setRelationshipOfficer(boolean relationshipOfficer) {
+        this.relationshipOfficer = relationshipOfficer;
+    }
+
+    public boolean isRelationshipTenPercentOwner() {
+        return relationshipTenPercentOwner;
+    }
+
+    public void setRelationshipTenPercentOwner(boolean relationshipTenPercentOwner) {
+        this.relationshipTenPercentOwner = relationshipTenPercentOwner;
+    }
+
+    public boolean isRelationshipOther() {
+        return relationshipOther;
+    }
+
+    public void setRelationshipOther(boolean relationshipOther) {
+        this.relationshipOther = relationshipOther;
+    }
+
+    public String getOfficerTitle() {
+        return officerTitle;
+    }
+
+    public void setOfficerTitle(String officerTitle) {
+        this.officerTitle = officerTitle;
+    }
+
+    public String getTitleOfSecurity() {
+        return titleOfSecurity;
+    }
+
+    public void setTitleOfSecurity(String titleOfSecurity) {
+        this.titleOfSecurity = titleOfSecurity;
+    }
+
+    public String getAcquiredOrDisposed() {
+        return acquiredOrDisposed;
+    }
+
+    public void setAcquiredOrDisposed(String acquiredOrDisposed) {
+        this.acquiredOrDisposed = acquiredOrDisposed;
+    }
+
+    public Integer getSharesOwnedFollowingTransaction() {
+        return sharesOwnedFollowingTransaction;
+    }
+
+    public void setSharesOwnedFollowingTransaction(Integer sharesOwnedFollowingTransaction) {
+        this.sharesOwnedFollowingTransaction = sharesOwnedFollowingTransaction;
+    }
+
+    public String getOwnershipForm() {
+        return ownershipForm;
+    }
+
+    public void setOwnershipForm(String ownershipForm) {
+        this.ownershipForm = ownershipForm;
+    }
+
+    public String getSignedBy() {
+        return signedBy;
+    }
+
+    public void setSignedBy(String signedBy) {
+        this.signedBy = signedBy;
+    }
+
+    public Instant getSignedAt() {
+        return signedAt;
+    }
+
+    public void setSignedAt(Instant signedAt) {
+        this.signedAt = signedAt;
     }
 
     public List<String> getValidationErrors() {

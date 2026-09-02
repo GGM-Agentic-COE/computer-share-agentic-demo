@@ -41,6 +41,13 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <!-- Renders the downloadable Form 4 PDF (FilingPdfService) — a bland, grayscale replica of
+           the real SEC paper form, distinct from the colorful in-app review screen. -->
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>3.0.8</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>

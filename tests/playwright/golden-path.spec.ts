@@ -7,12 +7,16 @@ test.describe('Automated Regulatory Filing Module — golden path', () => {
   test('executive simulates a trade, legal reviews and approves it', async ({ page }) => {
     // Executive: trigger a demo trade (stands in for a real EquatePlus transaction — FR-001)
     await page.goto('/');
-    await page.getByRole('button', { name: /simulate trade/i }).click();
+    await page.getByRole('button', { name: /execute trade/i }).click();
     await expect(page.getByText(/form 4 generated/i)).toBeVisible();
 
     // Legal & Compliance: find it on the dashboard
     await page.goto('/dashboard');
     await page.getByRole('row', { name: /under review/i }).first().click();
+
+    // Sign before approving — Approve & Submit stays disabled until signedBy is saved.
+    await page.getByLabel(/signature of reporting person/i).fill('S. Kapoor');
+    await page.getByRole('button', { name: /save edits/i }).click();
 
     // Review screen: approve
     await expect(page.getByRole('button', { name: /approve & submit/i })).toBeEnabled();

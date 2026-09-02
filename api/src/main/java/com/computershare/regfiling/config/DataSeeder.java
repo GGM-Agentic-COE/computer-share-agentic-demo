@@ -22,10 +22,25 @@ public class DataSeeder implements CommandLineRunner {
         if (userRepository.count() > 0) {
             return;
         }
-        userRepository.save(new User("exec-1", "J. Alvarez", UserRole.EXECUTIVE));
-        userRepository.save(new User("exec-2", "R. Chen", UserRole.EXECUTIVE));
-        userRepository.save(new User("exec-3", "M. Okafor", UserRole.EXECUTIVE));
-        userRepository.save(new User("legal-1", "S. Kapoor", UserRole.LEGAL_COMPLIANCE));
-        userRepository.save(new User("legal-2", "D. Whitfield", UserRole.LEGAL_COMPLIANCE));
+        userRepository.save(User.builder("exec-1", "J. Alvarez", UserRole.EXECUTIVE)
+                .name("Alvarez", "Jordan", null)
+                .address("482 Harborview Terrace", "Wilmington", "DE", "19801")
+                .director()
+                .baselineShareholding(12400)
+                .build());
+        userRepository.save(User.builder("exec-2", "R. Chen", UserRole.EXECUTIVE)
+                .name("Chen", "Riley", "M")
+                .address("77 Prairie Wind Lane", "Austin", "TX", "78701")
+                .officer("Chief Financial Officer")
+                .baselineShareholding(8750)
+                .build());
+        userRepository.save(User.builder("exec-3", "M. Okafor", UserRole.EXECUTIVE)
+                .name("Okafor", "Maya", "N")
+                .address("1290 Silverleaf Court", "Denver", "CO", "80202")
+                .tenPercentOwner()
+                .baselineShareholding(21900)
+                .build());
+        userRepository.save(User.builder("legal-1", "S. Kapoor", UserRole.LEGAL_COMPLIANCE).build());
+        userRepository.save(User.builder("legal-2", "D. Whitfield", UserRole.LEGAL_COMPLIANCE).build());
     }
 }

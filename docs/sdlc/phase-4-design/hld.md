@@ -1,15 +1,17 @@
 # High-Level Design (HLD)
-**Document Version:** 2.0.0 (revised — see §0 for what changed and why)
+**Document Version:** 2.1.0 (revised — see §0 for what changed and why)
 **Baseline Reference:** `kb-L1-computershare-enterprise-architecture.md` v1.0.0
 **Feature Coverage:** E1.F1–F4, E2.F2, E2.F3 (MVP-committed, Cycle 1) · E2.F1, E2.F4, E2.F5, E3.F1–F4 (designed, not built — see §8)
-**Stack:** Java 17 + Spring Boot 3.x + PostgreSQL (target) / H2 (MVP demo) · React 18 + TypeScript + Vite (frontend)
+**Stack:** Java 17 + Spring Boot 3.x + PostgreSQL (target) / H2 (MVP demo) + Apache PDFBox (Form 4 PDF export) · React 18 + TypeScript + Vite (frontend)
 **Correlation ID:** `C885C23C-949E-440C-8B0E-04FDD166A559`
 
 ---
 
 ## 0. Revision note
 
-Version 1.0.0 of this HLD (produced in Phase 4) was a single-page component table and a short data-flow list — accurate but too thin to actually design or review against, per your feedback. This revision restructures the document around the same pattern as a mature enterprise HLD: a system component diagram, one sequence diagram per real flow, an explicit state machine, a deployment view (grounded in `kb-L1-computershare-enterprise-architecture.md`'s target stack, with the MVP's actual local-process reality called out separately rather than conflated with it), a security view, an observability section, and an NFR compliance table. Nothing in v1.0.0 was factually wrong; it just didn't have enough surface to design from. All feature/story IDs below are epics-from-prd.md's real E#.F# IDs (realigned from the earlier simulated FEAT-N numbering).
+Version 1.0.0 of this HLD (produced in Phase 4) was a single-page component table and a short data-flow list — accurate but too thin to actually design or review against, per your feedback. Version 2.0.0 restructured the document around the same pattern as a mature enterprise HLD: a system component diagram, one sequence diagram per real flow, an explicit state machine, a deployment view (grounded in `kb-L1-computershare-enterprise-architecture.md`'s target stack, with the MVP's actual local-process reality called out separately rather than conflated with it), a security view, an observability section, and an NFR compliance table. All feature/story IDs below are epics-from-prd.md's real E#.F# IDs (realigned from the earlier simulated FEAT-N numbering).
+
+**Version 2.1.0** adds `FilingPdfService` (§1, §2.5) — a new component that renders a Filing as a downloadable, government-form-styled PDF via Apache PDFBox — and a signature precondition on the approve flow (§2.2, §3), reflecting the Form 4 field-set expansion documented in full in `lld.md` v2.1.0.
 
 ---
 
@@ -43,6 +45,7 @@ graph TB
             VS[ValidationService]
             FES[FilingEditService]
             APS[ApprovalService]
+            PDFS[FilingPdfService\nApache PDFBox — renders a bland,\ngrayscale Form 4 replica for download]
             ALS[AuditLogService]
             NS[NotificationService]
             DRE[DeadlineRiskEvaluator\nScheduled, 60s interval]
@@ -78,6 +81,8 @@ graph TB
     FGS --> NS
     FGS --> BDC
     FILINGC --> FES
+    FILINGC --> PDFS
+    PDFS -.->|reads Filing, no write| PG
     FES --> VS
     FES --> ALS
     APPROVALC --> APS
@@ -118,7 +123,7 @@ sequenceDiagram
     EQ->>GW: transaction-executed (executiveId, transactionCode, shares, pricePerShare)
     GW->>GW: resolve caller from Bearer token, verify executiveId matches caller
     GW->>FGS: generate(request)
-    FGS->>FGS: map transaction to Form 4 fields\n(issuer, reportingPerson, transactionDate anchored to America/New_York)
+    FGS->>FGS: map transaction to Form 4 fields — issuer/ticker, reportingPerson* +\nrelationship*/officerTitle (copied from the executive's User profile),\ntransactionDate (anchored to America/New_York), titleOfSecurity, acquiredOrDisposed\n(derived from transactionCode), sharesOwnedFollowingTransaction (baseline ± shares),\nownershipForm — full field list: lld.md §4.1
     alt required field missing (e.g. no transactionCode)
         FGS->>DB: save Filing(status=INCOMPLETE)
         FGS->>AUD: log(FLAGGED_INCOMPLETE)
@@ -168,13 +173,19 @@ sequenceDiagram
         FES-->>L: 200 Filing(status=VALIDATED)
     end
 
+    L->>FC: PATCH /filings/{id} {fields: {signedBy}}
+    Note over L,FC: Signature — an explicit, initially-empty step;\nsignedBy is just another editable field, not a separate endpoint
+    FC->>FES: edit(id, fields, actorId)
+    FES-->>L: 200 Filing(signedBy set)
+
     L->>AC: POST /filings/{id}/approve
     AC->>APS: approve(id, actorId)
     APS->>APS: guard — reject unless status == VALIDATED (409)
+    APS->>APS: guard — reject unless signedBy present (409,\n"has not been signed and cannot be approved")
     APS->>AUD: log(APPROVED)
     APS->>EDGAR: submit(filing)  note right of EDGAR: MOCK — see §8
     EDGAR-->>APS: mock confirmation id
-    APS->>APS: status = SUBMITTED
+    APS->>APS: status = SUBMITTED, signedAt = now()
     APS->>AUD: log(SUBMITTED)
     APS->>NOT: notify(SUBMITTED, executive AND legal)
     APS-->>L: 200 Filing(status=SUBMITTED)
@@ -219,6 +230,26 @@ sequenceDiagram
     Note over L: Dashboard polls this endpoint every few seconds\n(target: Redis-cached 30s TTL + push via streaming — E2.F1, not built)
 ```
 
+### 2.5 Download Form 4 PDF — new in v2.1.0
+
+```mermaid
+sequenceDiagram
+    participant U as Executive or Legal & Compliance (browser)
+    participant FC as FilingController
+    participant PDFS as FilingPdfService
+    participant DB as Database
+
+    U->>FC: GET /filings/{id}/pdf (Bearer token)
+    FC->>FC: RBAC — same ownership check as GET /filings/{id}\n(executive: own filing only; legal: any)
+    FC->>DB: fetch Filing
+    DB-->>FC: Filing
+    FC->>PDFS: render(filing)
+    PDFS->>PDFS: draw a bland, grayscale, ruled-grid replica of the real\nSEC Form 4 (header/OMB box, sections 1/2/3/5, Table I,\nsignature line) directly via PDFBox's content-stream API —\nno HTML/CSS rendering step, no external template
+    PDFS-->>FC: PDF bytes
+    FC-->>U: 200 application/pdf,\nContent-Disposition: attachment; filename="Form4-{id}.pdf"
+```
+This is a straight read of the Filing's current field values — it is not gated by the signature guard in §2.2 (a filing can be downloaded, reviewed offline, and printed before it's signed; only *approval* requires signing first). The browser can't attach the `Authorization` header to a plain `<a href>` download link, so the frontend fetches this endpoint's response as a `Blob` and triggers the save itself via a temporary object URL — see `ui/src/pages/FilingReview.tsx`.
+
 ---
 
 ## 3. Filing State Machine [E1.F1–F3 · BL — business logic]
@@ -234,7 +265,8 @@ stateDiagram-v2
     VALIDATED --> VALIDATED : legal edits field(s), re-validation passes
     VALIDATED --> UNDER_REVIEW : legal edits field(s) to an invalid value
 
-    VALIDATED --> SUBMITTED : approve() succeeds — mocked EDGAR submission
+    VALIDATED --> SUBMITTED : approve() succeeds — signedBy present,\nmocked EDGAR submission
+    VALIDATED --> [*] : approve() rejected (409) — signedBy blank\n("has not been signed")
     UNDER_REVIEW --> [*] : approve() rejected (409) — no state change
     INCOMPLETE --> [*] : approve() rejected (409) — no state change,\nINCOMPLETE has no edit path in MVP\n(would require re-simulating the trade)
 
@@ -255,7 +287,7 @@ stateDiagram-v2
 |---|---|---|---|
 | `INCOMPLETE` | Generation, missing required field | No (409) | No (no code path in MVP) |
 | `UNDER_REVIEW` | Generation (invalid value) or edit (invalid value) | No (409) | Yes |
-| `VALIDATED` | Generation (valid) or edit (now valid) | Yes | Yes |
+| `VALIDATED` | Generation (valid) or edit (now valid) | Yes, if `signedBy` is set (409 otherwise) | Yes |
 | `SUBMITTED` | Approve | No (409, terminal) | No (409, terminal) |
 
 `GENERATED`, `EDITED`, `APPROVED`, `SUBMITTED`, `FLAGGED_INCOMPLETE` are `AuditAction` values (what happened), never `FilingStatus` values (what state the filing rests in) — these are deliberately different enums; see LLD §1.
@@ -367,7 +399,8 @@ sequenceDiagram
 | `POST /demo/simulate-trade` | Own `executiveId` only (403 otherwise — found missing, fixed) | Not applicable (executives simulate their own trades) |
 | `GET /filings` | Own filings only, forced server-side | All filings in scope |
 | `GET /filings/{id}` | Own filing only (403 otherwise) | Any filing |
-| `PATCH /filings/{id}` | Forbidden (403) | Yes |
+| `GET /filings/{id}/pdf` | Own filing only (403 otherwise) | Any filing |
+| `PATCH /filings/{id}` | Forbidden (403) | Yes — every Form 4 field except `signedAt` |
 | `POST /filings/{id}/approve` | Forbidden (403) | Yes |
 | `GET /filings/{id}/audit-log` | Own filing only (403 otherwise — found missing, IDOR, fixed) | Any filing |
 | `GET /notifications?userId=` | Own `userId` only (403 otherwise — found missing, IDOR, fixed) | Own `userId` only |

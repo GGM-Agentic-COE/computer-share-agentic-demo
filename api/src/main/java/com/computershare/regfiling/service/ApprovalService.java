@@ -43,12 +43,22 @@ public class ApprovalService {
                     "Filing " + filingId + " is not VALIDATED (current status: " + filing.getStatus() + ") — approval blocked.");
         }
 
+        // Signature-block guard: "who" (signedBy) must already be present via an explicit prior
+        // PATCH — never silently auto-stamped. "When" (signedAt) IS auto-stamped below, at the
+        // moment of successful approval; only the "who" needs a human step first.
+        if (filing.getSignedBy() == null || filing.getSignedBy().isBlank()) {
+            throw new ApiExceptions.ConflictException(
+                    "Filing " + filingId + " has not been signed and cannot be approved.");
+        }
+
         auditLogService.log(filingId, AuditAction.APPROVED, actorId, "Approved by legal & compliance.");
 
         EdgarSubmissionConnector.SubmissionResult result = edgarSubmissionConnector.submit(filing);
 
+        Instant now = Instant.now();
         filing.setStatus(FilingStatus.SUBMITTED);
-        filing.setUpdatedAt(Instant.now());
+        filing.setSignedAt(now);
+        filing.setUpdatedAt(now);
         filingRepository.save(filing);
 
         auditLogService.log(filingId, AuditAction.SUBMITTED, actorId,

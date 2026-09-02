@@ -45,7 +45,7 @@ export function ExecutiveHome() {
   return (
     <div>
       <Button onClick={simulateTrade} disabled={busy}>
-        {busy ? 'Simulating…' : 'Simulate Trade'}
+        {busy ? 'Executing…' : 'Execute Trade'}
       </Button>
       {message && (
         <p role="status" className="mt-2 text-sm text-muted-foreground">
@@ -55,7 +55,7 @@ export function ExecutiveHome() {
 
       <h2 className="mb-3 mt-8 text-xs font-bold uppercase tracking-wide text-muted-foreground">My Filings</h2>
       {filings.length === 0 && (
-        <p className="text-sm text-muted-foreground">No filings yet — simulate a trade to get started.</p>
+        <p className="text-sm text-muted-foreground">No filings yet — execute a trade to get started.</p>
       )}
       <ul className="flex flex-col gap-2">
         {filings.map((f) => (

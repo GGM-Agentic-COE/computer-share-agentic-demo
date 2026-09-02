@@ -46,6 +46,17 @@ export const api = {
 
   auditLog: (authHeader: string, id: string) => request<AuditLogEntry[]>(`/filings/${id}/audit-log`, authHeader),
 
+  // Binary response (application/pdf) — bypasses the generic request() helper, which always
+  // parses JSON. A plain <a href> can't attach the Authorization header, so callers fetch this
+  // Blob directly and trigger the download themselves via a temporary object URL.
+  getFilingPdf: async (authHeader: string, id: string): Promise<Blob> => {
+    const res = await fetch(`${BASE_URL}/filings/${id}/pdf`, { headers: { Authorization: authHeader } });
+    if (!res.ok) {
+      throw new ApiError(res.status, undefined);
+    }
+    return res.blob();
+  },
+
   notifications: (authHeader: string, userId: string) =>
     request<AppNotification[]>(`/notifications?userId=${encodeURIComponent(userId)}`, authHeader),
 };

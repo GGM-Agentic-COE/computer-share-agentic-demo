@@ -1,5 +1,5 @@
 # User Flow Diagrams
-**Document Version:** 2.0.0 (replaces `user-journeys.md`)
+**Document Version:** 2.1.0 (Flow 6/7 updated for the full Form 4 field set, signature step, and PDF download — see those flows' own revision notes; replaces `user-journeys.md`)
 **Baseline Reference:** `kb-L1-computershare-enterprise-architecture.md` v1.0.0
 **Wireframes Reference:** `wireframes.html` (categorized by feature)
 **Feature Coverage:** E1.F1–F4, E2.F2, E2.F3 (all screens built in this MVP)
@@ -234,26 +234,42 @@
 ## Flow 6: Review & Edit a Filing
 **Feature:** E1.F2, E1.F3 · **Stories:** E1.F2-S1, E1.F3-S1 · **Screen:** Filing Review `/filings/:id`
 
+**v2.1.0 revision:** this screen now renders the full SEC Form 4 field set — not just Issuer/Reporting Person/Transaction Code/Shares/Price — organized into colorful, branded card sections (`Card` from the app's own design system, the same one every other screen uses; the "looks like the real government form" requirement is met by the separate downloadable PDF below, not this screen). Every field is editable by Legal & Compliance.
+
 ```
   Legal & Compliance on Filing Review screen
   (arrived via Flow 5's row click)
          │
          ▼
-  ┌──────────────────────────────────────────────┐
-  │ Form 4 — {executiveId} · {date}   [Status]     │
-  │ Issuer: Ascendion INC — Demo Issuer                │
-  │ Reporting Person: {name}                        │
-  │ Transaction Code: S                             │
-  │ Shares:     [____]  ← editable input            │
-  │ Price:      [____]  ← editable input            │
-  │ [ Save Edits ]   [ Approve & Submit ]           │
-  └──────────────────────┬─────────────────────────┘
+  ┌──────────────────────────────────────────────────────┐
+  │ Form 4 — {reportingPerson} · {date}   [Status]         │
+  ├──────────────────────────────────────────────────────┤
+  │ [Card] Reporting Person                                │
+  │   Last / First / Middle Name   [____][____][____]      │
+  │   Street                       [____________________]  │
+  │   City / State / Zip           [____][__][____]         │
+  ├──────────────────────────────────────────────────────┤
+  │ [Card] Issuer                                           │
+  │   Issuer Name / Ticker Symbol  [____________][____]     │
+  ├──────────────────────────────────────────────────────┤
+  │ [Card] Relationship to Issuer                            │
+  │   [ ] Director  [ ] Officer (+title)  [ ] 10% Owner  [ ] Other │
+  ├──────────────────────────────────────────────────────┤
+  │ [Card] Transaction Details (Table I)                     │
+  │   Title | Date | Code | Shares | A/D | Price | Owned    │
+  │   Following | Ownership Form — every cell editable       │
+  ├──────────────────────────────────────────────────────┤
+  │ [Card] Signature                                         │
+  │   Signature of Reporting Person  [_____________]         │
+  │   Signed: {signedAt or "Not yet signed"}   [Download PDF]│
+  └──────────────────────┬─────────────────────────────────┘
                          │
               Officer edits Shares to an invalid value (e.g. 0)
               Clicks [ Save Edits ]
                          │
                          ▼
-  PATCH /filings/{id} { fields: { shares: 0 } }
+  PATCH /filings/{id} { fields: { <every field's current value> } }
+   (the UI always sends the full field set on Save, not a diff)
                          │
              ┌───────────┴────────────┐
              ▼                        ▼
@@ -266,40 +282,57 @@
                           greater than 0" (role="alert"
                           on the enclosing error region)
                           Approve button stays disabled
-                          (filing.status !== 'VALIDATED')
+                          (filing.status !== 'VALIDATED' OR
+                           filing.signedBy is blank — see Flow 7)
 ```
 
+**Download PDF** (same screen, any time, not gated by signing or status): fetches `GET /filings/{id}/pdf` as an authenticated `Blob` (a plain link can't carry the `Authorization` header) and saves it client-side. The PDF itself is the one place in the whole product that deliberately looks like the real SEC paper form — bland, grayscale, ruled grid — rendered server-side by `FilingPdfService` (Apache PDFBox). See `hld.md` §2.5.
+
 **Accessibility notes:**
-- Each input has a real `<label htmlFor>` (`Shares`, `Price per share`)
+- Every input has a real `<label htmlFor>` or `aria-label` (`Shares`, `Price per share`, `Signature of Reporting Person`, etc.)
 - Field-level errors render adjacent to their field, not only in a page-level summary
-- `filing.validationErrors` (server-computed, from generation or the last failed edit) renders in a `role="alert"` block above the form when non-empty
+- `filing.validationErrors` (server-computed, from generation or the last failed edit) renders in a `role="alert"` block above the cards when non-empty
+- Relationship checkboxes are real `<input type="checkbox">`-backed controls (via the shared `Checkbox` primitive), independently toggleable — screen readers announce each one's own checked state, not a single combined summary
 
 ---
 
 ## Flow 7: Approve & Submit
 **Feature:** E1.F3 · **Story:** E1.F3-S2 · **Screen:** Filing Review `/filings/:id`
 
+**v2.1.0 revision:** approval now requires an explicit signature step first — this is a second precondition alongside `status === 'VALIDATED'`, not a replacement for it.
+
 ```
-  Filing status = VALIDATED
-  [ Approve & Submit ] button is enabled
-  (disabled whenever status !== 'VALIDATED' — the only
-   client-side gate; server re-checks independently)
+  Filing status = VALIDATED, but Signature field is still empty
+         │
+         │ Officer types their name into "Signature of Reporting
+         │ Person" and clicks [ Save Edits ] (Flow 6's PATCH —
+         │ signedBy is just another field in that same payload)
+         ▼
+  filing.signedBy now set (server-confirmed via the PATCH response)
+         │
+         ▼
+  [ Approve & Submit ] button becomes enabled
+  (disabled whenever status !== 'VALIDATED' OR signedBy is blank —
+   gated on the server-confirmed filing, not the in-progress edit,
+   same "edit → Save → Approve" mental model as every other field;
+   server re-checks both conditions independently)
          │
          │ Officer clicks Approve & Submit
          ▼
   POST /api/filings/{id}/approve
          │
-    ┌────┴────────────────────┐
-    ▼                         ▼
-  200 SUBMITTED           409 Conflict
-    │                    (status changed
-    ▼                     concurrently by
-  Status badge            another session —
-  updates to               not currently
-  "Submitted"              surfaced as a
-  Audit trail gains         distinct message
-  APPROVED + SUBMITTED       in the UI, see
-  entries (visible via       Flow 11)
+    ┌────┴──────────────────────────┐
+    ▼                                ▼
+  200 SUBMITTED                  409 Conflict
+    │                          (status !== VALIDATED, or
+    ▼                           signedBy blank — e.g. status
+  signedAt stamped server-side   changed concurrently by
+  (now(), never client-set)      another session; neither
+  Status badge updates to        cause is currently surfaced
+  "Submitted"                    as a distinct message in
+  Audit trail gains              the UI, see Flow 11)
+  APPROVED + SUBMITTED
+  entries (visible via
   "Show audit trail")
     │
     ▼
@@ -309,7 +342,7 @@
 ```
 
 **Accessibility notes:**
-- The Approve button's `disabled` state is a real HTML `disabled` attribute (keyboard/screen-reader correct), not a CSS-only visual disable
+- The Approve button's `disabled` state is a real HTML `disabled` attribute (keyboard/screen-reader correct), not a CSS-only visual disable — now driven by two conditions, not one
 - No explicit `aria-live` announcement on successful submission today beyond the status badge re-render — a follow-up should add one so screen-reader users get the same "it worked" signal sighted users get from the badge color/text change
 
 ---

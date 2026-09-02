@@ -30,6 +30,9 @@ import static com.computershare.regfiling.service.BusinessDayCalculator.ET;
 public class FormGenerationService {
 
     private static final String DEMO_ISSUER = "Ascendion INC — Demo Issuer";
+    private static final String DEMO_ISSUER_TICKER = "ASND";
+    private static final String DEFAULT_TITLE_OF_SECURITY = "Common Stock";
+    private static final String DEFAULT_OWNERSHIP_FORM = "D";
     private static final int FILING_DEADLINE_BUSINESS_DAYS = 2;
 
     private final FilingRepository filingRepository;
@@ -59,15 +62,39 @@ public class FormGenerationService {
 
         Filing filing = new Filing(UUID.randomUUID().toString(), executive.getId());
         filing.setIssuer(DEMO_ISSUER);
+        filing.setIssuerTicker(DEMO_ISSUER_TICKER);
+
         filing.setReportingPerson(executive.getDisplayName());
+        filing.setReportingPersonLast(executive.getLastName());
+        filing.setReportingPersonFirst(executive.getFirstName());
+        filing.setReportingPersonMiddle(executive.getMiddleName());
+        filing.setReportingPersonStreet(executive.getStreet());
+        filing.setReportingPersonCity(executive.getCity());
+        filing.setReportingPersonState(executive.getState());
+        filing.setReportingPersonZip(executive.getZip());
+
+        filing.setRelationshipDirector(executive.isRelationshipDirector());
+        filing.setRelationshipOfficer(executive.isRelationshipOfficer());
+        filing.setRelationshipTenPercentOwner(executive.isRelationshipTenPercentOwner());
+        filing.setRelationshipOther(executive.isRelationshipOther());
+        filing.setOfficerTitle(executive.getOfficerTitle());
+
         // Anchored to America/New_York, not the JVM default zone — BusinessDayCalculator's
         // statutory-deadline/EDGAR-cutoff math is ET-based, so transactionDate must be too, or a
         // non-ET-deployed server computes a deadline that's off by up to a day. Found at the
         // Phase 6 code-review gate.
         filing.setTransactionDate(LocalDate.now(ET));
+        filing.setTitleOfSecurity(DEFAULT_TITLE_OF_SECURITY);
         filing.setTransactionCode(request.getTransactionCode());
+        filing.setAcquiredOrDisposed(deriveAcquiredOrDisposed(filing.getTransactionCode()));
         filing.setShares(request.getShares());
         filing.setPricePerShare(request.getPricePerShare());
+        // Snapshot against the executive's fixed seeded baseline only — NOT a running ledger
+        // across this executive's prior filings (deliberate MVP simplification), and NOT
+        // recomputed if shares/acquiredOrDisposed are changed later via PATCH.
+        filing.setSharesOwnedFollowingTransaction(
+                computeSharesOwnedFollowing(executive.getBaselineShareholding(), filing.getShares(), filing.getAcquiredOrDisposed()));
+        filing.setOwnershipForm(DEFAULT_OWNERSHIP_FORM);
 
         Instant now = Instant.now();
         filing.setCreatedAt(now);
@@ -112,5 +139,23 @@ public class FormGenerationService {
 
     private static boolean isBlank(String s) {
         return s == null || s.isBlank();
+    }
+
+    private static String deriveAcquiredOrDisposed(String transactionCode) {
+        if (transactionCode == null) {
+            return null;
+        }
+        return switch (transactionCode) {
+            case "P", "A" -> "A";
+            case "S", "D" -> "D";
+            default -> null; // invalid code — ValidationService's transactionCode rule already flags this
+        };
+    }
+
+    private static Integer computeSharesOwnedFollowing(Integer baseline, Integer shares, String acquiredOrDisposed) {
+        if (baseline == null || shares == null || acquiredOrDisposed == null) {
+            return null;
+        }
+        return "A".equals(acquiredOrDisposed) ? baseline + shares : baseline - shares;
     }
 }
