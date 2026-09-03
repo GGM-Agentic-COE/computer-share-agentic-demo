@@ -82,3 +82,6 @@
 {"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"blueprint.updated","detail":"agents A7,A10,A11,A15,A16,A18,A19,A21,A22,A31 revised; all kb-L1-enterprise-architecture refs pointed to concrete file; republished","url":"https://claude.ai/code/artifact/bcf27a9c-5c6d-4131-b224-20a22cf10260"}
 {"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"verification.reconfirmed","detail":"mvn test 9/9 pass, npx vitest run 5/5 pass, npm run build clean"}
 {"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"revision_pass.completed"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"blueprint.corrected","agent":"L1-vision-idea-intake","detail":"removed the claim that PRD.txt was reconstructed as Phase 0's raw idea-brief input — circular against PRD.txt also being Phase 1's composed output"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"decision","detail":"docs/sdlc/phase-1-requirements/prd.md and docs/sdlc/phase-2-planning/epics.json kept in their phase-folder locations (an earlier pass this run had briefly deleted them in favor of the repo-root PRD.txt/epics-from-prd.md alone; reverted per explicit direction to keep that location)"}
+{"correlation_id":"C885C23C-949E-440C-8B0E-04FDD166A559","event":"revision_pass_2.completed"}

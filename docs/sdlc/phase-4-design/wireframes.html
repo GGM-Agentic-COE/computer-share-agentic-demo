@@ -209,6 +209,37 @@
   .field-error { color: var(--status-incomplete); font-size: 11.5px; margin-top: 4px; }
   .readonly-field { color: var(--text-muted); padding-top: 8px; font-size: 13px; }
 
+  /* ---------- Form 4 card sections (Filing Review — colorful, branded; the SEC-paper-form look
+     lives only in the downloadable PDF, not here) ---------- */
+  .form4-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card); padding: var(--space-4); margin-bottom: var(--space-4);
+  }
+  .form4-card h4 {
+    font-size: 13px; font-weight: 700; margin: 0 0 var(--space-3);
+    padding-bottom: var(--space-2); border-bottom: 1px solid var(--border);
+  }
+  .form4-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+  .form4-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .form4-grid label {
+    font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;
+    display: block; margin-bottom: 4px;
+  }
+  .form4-grid .fake-field, .form4-grid .live-field { width: 100%; box-sizing: border-box; }
+  .relationship-row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; font-size: 13px; }
+  .relationship-row .checkbox-label {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--text); cursor: pointer;
+  }
+  .relationship-row input[type="checkbox"] { accent-color: var(--brand-primary); width: 15px; height: 15px; }
+  table.dash-table.form4-table input.live-field, table.dash-table.form4-table select.live-select {
+    width: 100%; box-sizing: border-box; padding: 6px 8px; font-size: 12.5px;
+  }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--surface);
+    border: 1px solid var(--brand-primary); color: var(--brand-primary); border-radius: var(--radius-pill);
+    padding: 9px 18px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+
   .notif-drawer {
     max-width: 320px; background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-panel); box-shadow: var(--shadow-card); padding: var(--space-4);
@@ -306,7 +337,7 @@
       </div>
       <p class="epic-desc">
         Click through the golden path with fake local data, entirely in this page — no real API calls.
-        Simulate a trade as the executive, switch persona, review/edit/approve as Legal &amp; Compliance,
+        Execute a trade as the executive, switch persona, review/edit/approve as Legal &amp; Compliance,
         watch notifications and the audit trail update. Resets on page reload.
       </p>
       <div class="screen-card">
@@ -385,7 +416,7 @@
               </span>
             </div>
             <div class="mock-body">
-              <button class="btn btn-primary" type="button">Simulate Trade</button>
+              <button class="btn btn-primary" type="button">Execute Trade</button>
 
               <h3 class="section-label">My Filings</h3>
               <div class="filing-row">
@@ -413,7 +444,7 @@
             </div>
           </div>
           <div class="annotation">
-            <b>E1.F1-S1 / E1.F1-S3:</b> "Simulate Trade" stands in for a real EquatePlus transaction-executed event
+            <b>E1.F1-S1 / E1.F1-S3:</b> "Execute Trade" stands in for a real EquatePlus transaction-executed event
             (see hld.md §8, gap #4). A generation that hits the "missing required field" path (E1.F1-S3) is not
             reachable from this button today — see user-flows.md Flow 4 for that gap. <b>E1.F4-S1:</b> filings list is
             server-scoped to the authenticated executive regardless of any client state.
@@ -450,25 +481,90 @@
               </span>
             </div>
             <div class="mock-body">
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom: var(--space-5);">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom: var(--space-2);">
                 <button class="btn btn-ghost" type="button">← Back</button>
-                <span style="font-weight:700; font-size:15px;">Form 4 — exec-2 · 2026-08-30</span>
+                <span style="font-weight:700; font-size:15px;">Form 4 — R. Chen · 2026-08-30</span>
                 <span class="status-pill status-review">Under Review</span>
               </div>
 
-              <dl class="field-list">
-                <dt>Issuer</dt><dd class="readonly-field">Ascendion INC — Demo Issuer</dd>
-                <dt>Reporting Person</dt><dd class="readonly-field">R. Chen</dd>
-                <dt>Transaction Code</dt><dd class="readonly-field">S</dd>
-                <dt>Shares</dt>
-                <dd>
-                  <span class="fake-field error">0</span>
-                  <div class="field-error">shares: must be greater than 0</div>
-                </dd>
-                <dt>Price per share</dt><dd><span class="fake-field">18.75</span></dd>
-              </dl>
+              <div class="form4-card">
+                <h4>Reporting Person</h4>
+                <div class="form4-grid" style="margin-bottom: var(--space-3);">
+                  <div><label>Last Name</label><span class="fake-field">Chen</span></div>
+                  <div><label>First Name</label><span class="fake-field">Riley</span></div>
+                  <div><label>Middle Name</label><span class="fake-field">M</span></div>
+                </div>
+                <div><label>Street</label><span class="fake-field" style="min-width: 100%;">77 Prairie Wind Lane</span></div>
+                <div class="form4-grid" style="grid-template-columns: 1fr 100px 120px; margin-top: var(--space-3);">
+                  <div><label>City</label><span class="fake-field">Austin</span></div>
+                  <div><label>State</label><span class="fake-field">TX</span></div>
+                  <div><label>Zip</label><span class="fake-field">78701</span></div>
+                </div>
+              </div>
 
-              <div style="margin-top: var(--space-6); display:flex; gap: var(--space-3);">
+              <div class="form4-card">
+                <h4>Issuer</h4>
+                <div class="form4-grid cols-2">
+                  <div><label>Issuer Name</label><span class="fake-field" style="min-width: 100%;">Ascendion INC — Demo Issuer</span></div>
+                  <div><label>Ticker Symbol</label><span class="fake-field">ASND</span></div>
+                </div>
+              </div>
+
+              <div class="form4-card">
+                <h4>Relationship to Issuer</h4>
+                <div class="relationship-row">
+                  <label class="checkbox-label"><input type="checkbox" disabled /> Director</label>
+                  <label class="checkbox-label"><input type="checkbox" checked disabled /> Officer (give title below)</label>
+                  <span class="fake-field">Chief Financial Officer</span>
+                  <label class="checkbox-label"><input type="checkbox" disabled /> 10% Owner</label>
+                  <label class="checkbox-label"><input type="checkbox" disabled /> Other</label>
+                </div>
+              </div>
+
+              <div class="form4-card">
+                <h4>Transaction Details</h4>
+                <table class="dash-table form4-table">
+                  <thead>
+                    <tr>
+                      <th>Title of Security</th><th>Trans. Date</th><th>Code</th><th>Shares</th>
+                      <th>Acquired/Disposed</th><th>Price</th><th>Owned Following</th><th>Ownership Form</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input class="live-field" value="Common Stock" readonly /></td>
+                      <td><input class="live-field" value="2026-08-30" readonly /></td>
+                      <td><input class="live-field" value="S" readonly /></td>
+                      <td><input class="live-field error" value="0" readonly /></td>
+                      <td><select class="live-select" disabled><option>D</option></select></td>
+                      <td><input class="live-field" value="18.75" readonly /></td>
+                      <td><input class="live-field" value="8500" readonly /></td>
+                      <td><select class="live-select" disabled><option>D</option></select></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="field-error" style="margin-top: var(--space-2);">shares: must be greater than 0</div>
+              </div>
+
+              <div class="form4-card">
+                <h4>Signature</h4>
+                <div style="display:flex; align-items:flex-end; justify-content:space-between; gap: var(--space-4); flex-wrap: wrap;">
+                  <div>
+                    <label style="font-size:11px; color: var(--text-dim); font-weight:600; text-transform:uppercase; display:block; margin-bottom:4px;">Signature of Reporting Person</label>
+                    <span class="fake-field" style="min-width:260px;">&nbsp;</span>
+                  </div>
+                  <div>
+                    <label style="font-size:11px; color: var(--text-dim); font-weight:600; text-transform:uppercase; display:block; margin-bottom:4px;">Signed</label>
+                    <span style="font-size:13px; color: var(--text-muted);">Not yet signed</span>
+                  </div>
+                  <button class="btn-download" type="button">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Download PDF
+                  </button>
+                </div>
+              </div>
+
+              <div style="margin-top: var(--space-2); display:flex; gap: var(--space-3);">
                 <button class="btn btn-primary" type="button">Save Edits</button>
                 <button class="btn btn-disabled" type="button">Approve &amp; Submit</button>
               </div>
@@ -484,8 +580,11 @@
           <div class="annotation">
             <b>E1.F2-S1:</b> field-level validation error rendered inline, sourced from the server's
             <code style="background:transparent;">validationErrors</code>, not a client-only rule. <b>E1.F3-S1/S2:</b> Approve is
-            disabled until status is <code style="background:transparent;">VALIDATED</code> — a real
-            <code style="background:transparent;">disabled</code> attribute, not a CSS-only visual state.
+            disabled until status is <code style="background:transparent;">VALIDATED</code> <i>and</i> the Signature field is
+            saved (non-blank) — both are real <code style="background:transparent;">disabled</code>-attribute preconditions, not
+            a CSS-only visual state. <b>Download PDF</b> renders a bland, grayscale, government-form-styled replica of this
+            same data server-side (Apache PDFBox) — deliberately the opposite visual treatment from this colorful card layout;
+            see <code style="background:transparent;">lld.md</code> §4.8.
           </div>
         </div>
       </div>
@@ -654,8 +753,14 @@
 <script>
 (function () {
   var USERS = {
-    'exec-1': { id: 'exec-1', name: 'J. Alvarez', role: 'EXECUTIVE' },
-    'exec-2': { id: 'exec-2', name: 'R. Chen', role: 'EXECUTIVE' },
+    'exec-1': { id: 'exec-1', name: 'J. Alvarez', role: 'EXECUTIVE',
+      last: 'Alvarez', first: 'Jordan', middle: '', street: '482 Harborview Terrace',
+      city: 'Wilmington', state: 'DE', zip: '19801', relationship: 'director', officerTitle: '',
+      baseline: 12400 },
+    'exec-2': { id: 'exec-2', name: 'R. Chen', role: 'EXECUTIVE',
+      last: 'Chen', first: 'Riley', middle: 'M', street: '77 Prairie Wind Lane',
+      city: 'Austin', state: 'TX', zip: '78701', relationship: 'officer', officerTitle: 'Chief Financial Officer',
+      baseline: 8750 },
     'legal-1': { id: 'legal-1', name: 'S. Kapoor', role: 'LEGAL_COMPLIANCE' }
   };
 
@@ -665,15 +770,23 @@
     reviewFilingId: null,
     nextId: 1,
     filings: [
-      { id: 'f1', executiveId: 'exec-1', issuer: 'Ascendion INC — Demo Issuer', reportingPerson: 'J. Alvarez',
-        transactionDate: '2026-08-28', transactionCode: 'S', shares: 1200, pricePerShare: 42.10,
+      { id: 'f1', executiveId: 'exec-1', issuer: 'Ascendion INC — Demo Issuer', issuerTicker: 'ASND',
+        reportingPerson: 'J. Alvarez', reportingPersonLast: 'Alvarez', reportingPersonFirst: 'Jordan', reportingPersonMiddle: '',
+        reportingPersonStreet: '482 Harborview Terrace', reportingPersonCity: 'Wilmington', reportingPersonState: 'DE', reportingPersonZip: '19801',
+        relationship: 'director', officerTitle: '', titleOfSecurity: 'Common Stock',
+        transactionDate: '2026-08-28', transactionCode: 'S', acquiredOrDisposed: 'D', shares: 1200, pricePerShare: 42.10,
+        sharesOwnedFollowingTransaction: 11200, ownershipForm: 'D', signedBy: 'S. Kapoor', signedAt: '2026-08-28',
         status: 'SUBMITTED', errors: [], audit: [
           { action: 'GENERATED', actor: 'exec-1', detail: 'Form 4 generated from simulated trade.' },
           { action: 'APPROVED', actor: 'legal-1', detail: 'Approved by legal & compliance.' },
           { action: 'SUBMITTED', actor: 'legal-1', detail: 'Mock EDGAR submission confirmation: MOCK-EDGAR-F1000001' }
         ] },
-      { id: 'f2', executiveId: 'exec-2', issuer: 'Ascendion INC — Demo Issuer', reportingPerson: 'R. Chen',
-        transactionDate: '2026-08-30', transactionCode: 'S', shares: 0, pricePerShare: 18.75,
+      { id: 'f2', executiveId: 'exec-2', issuer: 'Ascendion INC — Demo Issuer', issuerTicker: 'ASND',
+        reportingPerson: 'R. Chen', reportingPersonLast: 'Chen', reportingPersonFirst: 'Riley', reportingPersonMiddle: 'M',
+        reportingPersonStreet: '77 Prairie Wind Lane', reportingPersonCity: 'Austin', reportingPersonState: 'TX', reportingPersonZip: '78701',
+        relationship: 'officer', officerTitle: 'Chief Financial Officer', titleOfSecurity: 'Common Stock',
+        transactionDate: '2026-08-30', transactionCode: 'S', acquiredOrDisposed: 'D', shares: 0, pricePerShare: 18.75,
+        sharesOwnedFollowingTransaction: 8750, ownershipForm: 'D', signedBy: '', signedAt: null,
         status: 'UNDER_REVIEW', errors: ['shares: must be greater than 0'], audit: [
           { action: 'GENERATED', actor: 'exec-2', detail: 'Form 4 generated from simulated trade.' }
         ] }
@@ -723,14 +836,18 @@
     state.drawerOpen = !state.drawerOpen;
     render();
   };
-  window.protoSimulateTrade = function () {
+  window.protoExecuteTrade = function () {
     var u = currentUser();
     var id = 'f' + (100 + (++state.nextId));
     var shares = 100 + Math.round(Math.random() * 800);
     var price = Math.round((10 + Math.random() * 80) * 100) / 100;
     var filing = {
-      id: id, executiveId: u.id, issuer: 'Ascendion INC — Demo Issuer', reportingPerson: u.name,
-      transactionDate: '2026-09-01', transactionCode: 'S', shares: shares, pricePerShare: price,
+      id: id, executiveId: u.id, issuer: 'Ascendion INC — Demo Issuer', issuerTicker: 'ASND',
+      reportingPerson: u.name, reportingPersonLast: u.last, reportingPersonFirst: u.first, reportingPersonMiddle: u.middle,
+      reportingPersonStreet: u.street, reportingPersonCity: u.city, reportingPersonState: u.state, reportingPersonZip: u.zip,
+      relationship: u.relationship, officerTitle: u.officerTitle, titleOfSecurity: 'Common Stock',
+      transactionDate: '2026-09-01', transactionCode: 'S', acquiredOrDisposed: 'D', shares: shares, pricePerShare: price,
+      sharesOwnedFollowingTransaction: u.baseline - shares, ownershipForm: 'D', signedBy: '', signedAt: null,
       status: 'VALIDATED', errors: [],
       audit: [{ action: 'GENERATED', actor: u.id, detail: 'Form 4 generated from simulated trade.' }]
     };
@@ -742,6 +859,7 @@
     var f = findFiling(id);
     var sharesEl = document.getElementById('proto-shares');
     var priceEl = document.getElementById('proto-price');
+    var signedEl = document.getElementById('proto-signed');
     var shares = parseInt(sharesEl.value, 10);
     var price = parseFloat(priceEl.value);
     var errors = [];
@@ -749,17 +867,19 @@
     if (!(price >= 0)) errors.push('pricePerShare: must be greater than or equal to 0');
     f.shares = isNaN(shares) ? f.shares : shares;
     f.pricePerShare = isNaN(price) ? f.pricePerShare : price;
+    f.signedBy = signedEl ? signedEl.value : f.signedBy;
     f.errors = errors;
     f.status = errors.length ? 'UNDER_REVIEW' : 'VALIDATED';
-    if (!errors.length) f.audit.push({ action: 'EDITED', actor: currentUser().id, detail: 'Fields updated: shares, pricePerShare' });
+    if (!errors.length) f.audit.push({ action: 'EDITED', actor: currentUser().id, detail: 'Fields updated: reporting person, issuer, relationship, transaction detail, signature' });
     render();
   };
   window.protoApprove = function (id) {
     var f = findFiling(id);
-    if (f.status !== 'VALIDATED') return;
+    if (f.status !== 'VALIDATED' || !f.signedBy) return;
     var confirmationId = 'MOCK-EDGAR-' + id.toUpperCase();
     f.audit.push({ action: 'APPROVED', actor: currentUser().id, detail: 'Approved by legal & compliance.' });
     f.status = 'SUBMITTED';
+    f.signedAt = '2026-09-01';
     f.audit.push({ action: 'SUBMITTED', actor: currentUser().id, detail: 'Mock EDGAR submission confirmation: ' + confirmationId });
     notify(f.executiveId, 'SUBMITTED', 'Your Form 4 has been submitted (confirmation ' + confirmationId + ').');
     notify(currentUser().id, 'SUBMITTED', 'Form 4 for filing ' + id + ' has been submitted.');
@@ -783,9 +903,9 @@
         '<div class="meta">Form 4 · ' + esc(f.transactionDate) + ' · ' + f.shares + ' sh @ $' + f.pricePerShare.toFixed(2) +
         '<div class="sub">' + (f.status === 'SUBMITTED' ? 'Submitted' : 'Awaiting legal review') + '</div>' + risk + '</div>' +
         '<span class="status-pill ' + statusClass(f.status) + '">' + statusLabel(f.status) + '</span></div>';
-    }).join('') || '<p style="color:var(--text-dim); font-size:13px;">No filings yet — simulate a trade to get started.</p>';
+    }).join('') || '<p style="color:var(--text-dim); font-size:13px;">No filings yet — execute a trade to get started.</p>';
 
-    return '<button class="btn btn-primary" type="button" onclick="protoSimulateTrade()">Simulate Trade</button>' +
+    return '<button class="btn btn-primary" type="button" onclick="protoExecuteTrade()">Execute Trade</button>' +
       '<h3 class="section-label">My Filings</h3>' + rows;
   }
 
@@ -821,26 +941,68 @@
     var auditRows = f.audit.map(function (a) {
       return '<li>' + a.action + ' by ' + esc(a.actor) + ': ' + esc(a.detail) + '</li>';
     }).join('');
+    var canApprove = f.status === 'VALIDATED' && f.signedBy;
 
     return '<button class="proto-back" type="button" onclick="protoGo(\'dashboard\')">&larr; Back</button>' +
-      '<div style="display:flex; align-items:center; gap:10px; margin: var(--space-4) 0 var(--space-5);">' +
-      '<span style="font-weight:700; font-size:15px;">Form 4 — ' + esc(f.executiveId) + ' · ' + esc(f.transactionDate) + '</span>' +
+      '<div style="display:flex; align-items:center; gap:10px; margin: var(--space-4) 0 var(--space-2);">' +
+      '<span style="font-weight:700; font-size:15px;">Form 4 — ' + esc(f.reportingPerson) + ' · ' + esc(f.transactionDate) + '</span>' +
       '<span class="status-pill ' + statusClass(f.status) + '">' + statusLabel(f.status) + '</span></div>' +
-      '<dl class="field-list">' +
-      '<dt>Issuer</dt><dd class="readonly-field">' + esc(f.issuer) + '</dd>' +
-      '<dt>Reporting Person</dt><dd class="readonly-field">' + esc(f.reportingPerson) + '</dd>' +
-      '<dt>Transaction Code</dt><dd class="readonly-field">' + esc(f.transactionCode) + '</dd>' +
-      '<dt><label for="proto-shares">Shares</label></dt><dd>' +
-      '<input class="live-field' + (errShares ? ' error' : '') + '" id="proto-shares" value="' + f.shares + '" /> ' +
-      (errShares ? '<div class="field-error">' + esc(errShares) + '</div>' : '') + '</dd>' +
-      '<dt><label for="proto-price">Price per share</label></dt><dd>' +
-      '<input class="live-field' + (errPrice ? ' error' : '') + '" id="proto-price" value="' + f.pricePerShare + '" /> ' +
-      (errPrice ? '<div class="field-error">' + esc(errPrice) + '</div>' : '') + '</dd>' +
-      '</dl>' +
-      '<div style="margin-top: var(--space-6); display:flex; gap: var(--space-3);">' +
+
+      '<div class="form4-card"><h4>Reporting Person</h4>' +
+      '<div class="form4-grid" style="margin-bottom:var(--space-3);">' +
+      '<div><label>Last Name</label><span class="fake-field">' + esc(f.reportingPersonLast) + '</span></div>' +
+      '<div><label>First Name</label><span class="fake-field">' + esc(f.reportingPersonFirst) + '</span></div>' +
+      '<div><label>Middle Name</label><span class="fake-field">' + esc(f.reportingPersonMiddle || '') + '</span></div></div>' +
+      '<div><label>Street</label><span class="fake-field" style="min-width:100%;">' + esc(f.reportingPersonStreet) + '</span></div>' +
+      '<div class="form4-grid" style="grid-template-columns: 1fr 100px 120px; margin-top:var(--space-3);">' +
+      '<div><label>City</label><span class="fake-field">' + esc(f.reportingPersonCity) + '</span></div>' +
+      '<div><label>State</label><span class="fake-field">' + esc(f.reportingPersonState) + '</span></div>' +
+      '<div><label>Zip</label><span class="fake-field">' + esc(f.reportingPersonZip) + '</span></div></div></div>' +
+
+      '<div class="form4-card"><h4>Issuer</h4><div class="form4-grid cols-2">' +
+      '<div><label>Issuer Name</label><span class="fake-field" style="min-width:100%;">' + esc(f.issuer) + '</span></div>' +
+      '<div><label>Ticker Symbol</label><span class="fake-field">' + esc(f.issuerTicker) + '</span></div></div></div>' +
+
+      '<div class="form4-card"><h4>Relationship to Issuer</h4><div class="relationship-row">' +
+      '<label class="checkbox-label"><input type="checkbox" disabled' + (f.relationship === 'director' ? ' checked' : '') + ' /> Director</label>' +
+      '<label class="checkbox-label"><input type="checkbox" disabled' + (f.relationship === 'officer' ? ' checked' : '') + ' /> Officer (give title below)</label>' +
+      (f.officerTitle ? '<span class="fake-field">' + esc(f.officerTitle) + '</span>' : '') +
+      '<label class="checkbox-label"><input type="checkbox" disabled' + (f.relationship === 'tenPercentOwner' ? ' checked' : '') + ' /> 10% Owner</label>' +
+      '<label class="checkbox-label"><input type="checkbox" disabled' + (f.relationship === 'other' ? ' checked' : '') + ' /> Other</label>' +
+      '</div></div>' +
+
+      '<div class="form4-card"><h4>Transaction Details</h4>' +
+      '<table class="dash-table form4-table"><thead><tr>' +
+      '<th>Title of Security</th><th>Trans. Date</th><th>Code</th><th><label for="proto-shares">Shares</label></th>' +
+      '<th>Acquired/Disposed</th><th><label for="proto-price">Price</label></th><th>Owned Following</th><th>Ownership Form</th>' +
+      '</tr></thead><tbody><tr>' +
+      '<td><input class="live-field" value="' + esc(f.titleOfSecurity) + '" readonly /></td>' +
+      '<td><input class="live-field" value="' + esc(f.transactionDate) + '" readonly /></td>' +
+      '<td><input class="live-field" value="' + esc(f.transactionCode) + '" readonly /></td>' +
+      '<td><input class="live-field' + (errShares ? ' error' : '') + '" id="proto-shares" value="' + f.shares + '" /></td>' +
+      '<td><select class="live-select" disabled><option>' + esc(f.acquiredOrDisposed) + '</option></select></td>' +
+      '<td><input class="live-field' + (errPrice ? ' error' : '') + '" id="proto-price" value="' + f.pricePerShare + '" /></td>' +
+      '<td><input class="live-field" value="' + f.sharesOwnedFollowingTransaction + '" readonly /></td>' +
+      '<td><select class="live-select" disabled><option>' + esc(f.ownershipForm) + '</option></select></td>' +
+      '</tr></tbody></table>' +
+      (errShares ? '<div class="field-error" style="margin-top:var(--space-2);">' + esc(errShares) + '</div>' : '') +
+      (errPrice ? '<div class="field-error" style="margin-top:var(--space-2);">' + esc(errPrice) + '</div>' : '') +
+      '</div>' +
+
+      '<div class="form4-card"><h4>Signature</h4>' +
+      '<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap;">' +
+      '<div><label for="proto-signed" style="font-size:11px; color:var(--text-dim); font-weight:600; text-transform:uppercase; display:block; margin-bottom:4px;">Signature of Reporting Person</label>' +
+      '<input class="live-field" id="proto-signed" style="min-width:220px;" value="' + esc(f.signedBy || '') + '" placeholder="Type your full legal name to sign" /></div>' +
+      '<div><span style="font-size:11px; color:var(--text-dim); font-weight:600; text-transform:uppercase; display:block; margin-bottom:4px;">Signed</span>' +
+      '<span style="font-size:13px; color:var(--text-muted);">' + (f.signedAt ? esc(f.signedAt) : 'Not yet signed') + '</span></div>' +
+      '<button class="btn-download" type="button" title="Static prototype — no real PDF is generated here; see the live app\'s Download PDF button">' +
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      'Download PDF</button></div></div>' +
+
+      '<div style="margin-top:var(--space-2); display:flex; gap: var(--space-3);">' +
       '<button class="btn btn-primary" type="button" onclick="protoSaveEdits(\'' + f.id + '\')">Save Edits</button>' +
-      '<button class="btn' + (f.status === 'VALIDATED' ? ' btn-primary' : '') + '" type="button" onclick="protoApprove(\'' + f.id + '\')" ' +
-      (f.status === 'VALIDATED' ? '' : 'disabled') + '>Approve &amp; Submit</button></div>' +
+      '<button class="btn' + (canApprove ? ' btn-primary' : '') + '" type="button" onclick="protoApprove(\'' + f.id + '\')" ' +
+      (canApprove ? '' : 'disabled') + '>Approve &amp; Submit</button></div>' +
       '<button class="btn btn-ghost" type="button" style="margin-top:var(--space-6);" onclick="protoToggleAudit()">Show/Hide audit trail</button>' +
       '<ul id="proto-audit-list" style="display:none; font-size:12px; margin-top:8px;">' + auditRows + '</ul>';
   }

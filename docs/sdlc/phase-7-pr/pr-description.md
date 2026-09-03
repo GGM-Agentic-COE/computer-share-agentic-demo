@@ -17,7 +17,7 @@ Implements an MVP slice of Computershare EquatePlus's Automated Regulatory Filin
 ## Traceability
 
 - Requirements: [functional-requirements.json](../phase-1-requirements/functional-requirements.json) (FR-001–FR-020) → [prd.md](../phase-1-requirements/prd.md)
-- Planning: [epics.json](../phase-2-planning/epics.json) / [features.json](../phase-2-planning/features.json) (simulated Jira keys `EPIC-*`/`FEAT-*` — no live Jira instance in this environment)
+- Planning: [epics.json](../phase-2-planning/epics.json) / [features.json](../phase-2-planning/features.json) (E#.F# IDs, epics-from-prd.md's own scheme — no live Jira instance in this environment)
 - Stories & Work Units: [stories.json](../phase-3-inception/stories.json) / [tasks.json](../phase-3-inception/tasks.json)
 - Design: [openapi.yaml](../phase-4-design/openapi.yaml), [hld.md](../phase-4-design/hld.md), [lld.md](../phase-4-design/lld.md), [db-schema.sql](../phase-4-design/db-schema.sql)
 - Tests: [test-cases.feature](../phase-5-test-strategy/test-cases.feature) (simulated XRay keys — no live XRay instance)

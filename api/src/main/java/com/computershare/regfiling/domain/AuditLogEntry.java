@@ -1,5 +1,6 @@
 package com.computershare.regfiling.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,6 +28,10 @@ public class AuditLogEntry {
 
     private String actorId;
 
+    // Default-length VARCHAR(255) was too short once a single PATCH can touch every Form 4 field
+    // (the "Fields updated: [...]" detail string lists every key) — found via a live PATCH that
+    // sent all ~24 editable fields at once and hit H2's "Value too long" error.
+    @Column(length = 2000)
     private String detail;
 
     private Instant occurredAt;

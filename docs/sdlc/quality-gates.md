@@ -71,3 +71,25 @@ Each entry: phase, gate name, threshold, score, verdict, method (independent age
 **Human gate:** auto-approved for this demo run per your instruction to produce full breadth across phases — but unlike the earlier auto-approved gates, this one is presented to you with the actual passing test output and a live-verified golden path, not just generated artifacts, since it's the phase producing real running code.
 
 ---
+
+## Revision Pass — Realignment & Depth (post-Phase 7)
+
+Following delivery, five further changes were requested and applied directly rather than re-run through independent gates (this is a documentation/alignment pass, not new construction):
+
+1. **`prd.md` and `epics.json` replaced** with the real AAVA-generated `PRD.txt`/`epics-from-prd.md` (repo root), superseding the earlier independently-composed/simulated versions. `stories.json` (15 stories) and `tasks.json` (13 Work Units) realigned to epics-from-prd.md's real E#/E#.F#/E#.F#-S# IDs throughout — `features.json`, `prioritized-backlog.md`, `cycle-plan.md`, `openapi.yaml`, `db-schema.sql`, `CHANGELOG.md`, and 5 Java service files updated to match.
+2. **`wireframes.md` (ASCII) replaced with `wireframes.html`**, categorized by epic (E1/E2), styled from `docs/design/computershare-design-system.md`'s real extracted tokens. Zero emoji — verified by a full-repo sweep (see below).
+3. **`docs/architecture/kb-L1-computershare-enterprise-architecture.md`** authored — a hypothetical but representative EA reference (modeled on a supplied real-world example's structure/depth), grounding HLD/LLD against real target-stack constraints (Java/Spring Boot/PostgreSQL/Kafka/Okta/AWS EKS) with an explicit gap register against this MVP's actual simplifications.
+4. **`hld.md` and `lld.md` rewritten to v2.0.0** with full architectural depth (component/sequence/state diagrams, deployment/security views, per-endpoint handler specs, schema documentation) — the v1.0.0 versions were accurate but too thin to design or review against. **`user-journeys.md` replaced by `user-flows.md`** — 12 flows with accessibility notes, a traceability matrix, and an honest accessibility summary (documents real gaps, not just happy paths).
+5. **Blueprint updated** (`docs/sdlc/agentic-blueprint.html`, moved here from repo root for consistency) — all emoji removed, and agents A7, A10, A15, A16, A18, A19, A21, A22, A31 and every `kb-L1-enterprise-architecture` reference updated to reflect the above; republished to the same artifact URL.
+
+---
+
+## Revision Pass 2 — Vision-Phase Framing Fixed
+
+`docs/sdlc/phase-1-requirements/prd.md` and `docs/sdlc/phase-2-planning/epics.json` stay in place — they hold the real AAVA-generated `PRD.txt`/`epics-from-prd.md` content, reproduced in full (per Item 1 above) rather than re-synthesized, and the phase-folder location is deliberate (that's where each phase's authoritative output belongs, alongside the rest of its artifacts).
+
+1. **Blueprint's Phase 0 framing fixed:** agent A1 (`L1-vision-idea-intake`) no longer lists `PRD.txt` as an input "reconstructed" into the idea brief — that was circular (the PRD can't simultaneously be raw input to the vision phase and the composed output of the requirements phase two phases later) and confusing to read. A1's input is now a plain raw-ask statement instead.
+
+**Full-repo emoji sweep:** 0 hits (Unicode pictograph/symbol ranges) across `docs/`, `api/`, `ui/`, `tests/` after this pass — was 33 hits (across the blueprint, 2 React components, and 5 markdown docs) before.
+
+**Re-verified after this pass:** `mvn test` (9/9 pass), `npx vitest run` (5/5 pass), `npm run build` (clean) — the two React components edited for emoji removal (`NotificationBell.tsx`, `DeadlineRiskBanner.tsx`) did not regress.

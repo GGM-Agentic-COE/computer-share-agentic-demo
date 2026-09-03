@@ -95,11 +95,14 @@ class FilingWorkflowTests {
         mockMvc.perform(post("/api/filings/{id}/approve", filingId).header("Authorization", LEGAL_AUTH))
                 .andExpect(status().isConflict());
 
-        // S5/S6: fix the invalid field via PATCH -> re-validated -> VALIDATED
+        // S5/S6: fix the invalid field via PATCH -> re-validated -> VALIDATED. signedBy rides
+        // along in the same PATCH so no extra EDITED audit entry is introduced (keeps the
+        // GENERATED/EDITED/APPROVED/SUBMITTED audit-index assertions below correct).
         mockMvc.perform(patch("/api/filings/{id}", filingId)
                         .header("Authorization", LEGAL_AUTH)
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(Map.of("fields", Map.of("shares", 1200)))))
+                        .content(objectMapper.writeValueAsString(
+                                Map.of("fields", Map.of("shares", 1200, "signedBy", "S. Kapoor")))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("VALIDATED"));
 
@@ -174,6 +177,12 @@ class FilingWorkflowTests {
                 .andReturn().getResponse().getContentAsString();
         String filingId = objectMapper.readTree(response).get("id").asText();
 
+        mockMvc.perform(patch("/api/filings/{id}", filingId)
+                        .header("Authorization", LEGAL_AUTH)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of("fields", Map.of("signedBy", "S. Kapoor")))))
+                .andExpect(status().isOk());
+
         mockMvc.perform(post("/api/filings/{id}/approve", filingId).header("Authorization", LEGAL_AUTH))
                 .andExpect(status().isOk());
 
@@ -182,5 +191,109 @@ class FilingWorkflowTests {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(Map.of("fields", Map.of("shares", 999)))))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void approveWithoutSignatureIsRejected() throws Exception {
+        String response = mockMvc.perform(post("/api/demo/simulate-trade")
+                        .header("Authorization", EXEC_AUTH)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "executiveId", "exec-1", "transactionCode", "S", "shares", 100, "pricePerShare", 10.0))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status").value("VALIDATED"))
+                .andReturn().getResponse().getContentAsString();
+        String filingId = objectMapper.readTree(response).get("id").asText();
+
+        mockMvc.perform(post("/api/filings/{id}/approve", filingId).header("Authorization", LEGAL_AUTH))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value(
+                        "Filing " + filingId + " has not been signed and cannot be approved."));
+    }
+
+    @Test
+    void editingEveryFieldAtOnceSucceeds() throws Exception {
+        // Mirrors exactly what the UI actually sends on every Save Edits — the full field set,
+        // not a diff. Regression coverage for a real bug found via live browser testing: the
+        // resulting "Fields updated: [...]" audit-log detail string (~24 field names) exceeded
+        // AuditLogEntry.detail's original VARCHAR(255) column and threw a 500 (fixed by widening
+        // that column to 2000 — see AuditLogEntry.java).
+        String response = mockMvc.perform(post("/api/demo/simulate-trade")
+                        .header("Authorization", EXEC_AUTH)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "executiveId", "exec-1", "transactionCode", "S", "shares", 100, "pricePerShare", 10.0))))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        String filingId = objectMapper.readTree(response).get("id").asText();
+
+        Map<String, Object> allFields = Map.ofEntries(
+                Map.entry("issuer", "Ascendion INC — Demo Issuer"),
+                Map.entry("issuerTicker", "ASND"),
+                Map.entry("reportingPersonLast", "Alvarez"),
+                Map.entry("reportingPersonFirst", "Jordan"),
+                Map.entry("reportingPersonMiddle", ""),
+                Map.entry("reportingPersonStreet", "482 Harborview Terrace"),
+                Map.entry("reportingPersonCity", "Wilmington"),
+                Map.entry("reportingPersonState", "DE"),
+                Map.entry("reportingPersonZip", "19801"),
+                Map.entry("relationshipDirector", true),
+                Map.entry("relationshipOfficer", false),
+                Map.entry("relationshipTenPercentOwner", false),
+                Map.entry("relationshipOther", false),
+                Map.entry("officerTitle", ""),
+                Map.entry("titleOfSecurity", "Common Stock"),
+                Map.entry("transactionDate", "2026-09-02"),
+                Map.entry("transactionCode", "S"),
+                Map.entry("acquiredOrDisposed", "D"),
+                Map.entry("shares", 100),
+                Map.entry("pricePerShare", 10.0),
+                Map.entry("sharesOwnedFollowingTransaction", 12300),
+                Map.entry("ownershipForm", "D"),
+                Map.entry("signedBy", "S. Kapoor"));
+
+        mockMvc.perform(patch("/api/filings/{id}", filingId)
+                        .header("Authorization", LEGAL_AUTH)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of("fields", allFields))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("VALIDATED"))
+                .andExpect(jsonPath("$.signedBy").value("S. Kapoor"));
+
+        mockMvc.perform(post("/api/filings/{id}/approve", filingId).header("Authorization", LEGAL_AUTH))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("SUBMITTED"));
+    }
+
+    @Test
+    void downloadFilingPdf_returnsApplicationPdf() throws Exception {
+        String response = mockMvc.perform(post("/api/demo/simulate-trade")
+                        .header("Authorization", EXEC_AUTH)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "executiveId", "exec-1", "transactionCode", "S", "shares", 100, "pricePerShare", 10.0))))
+                .andReturn().getResponse().getContentAsString();
+        String filingId = objectMapper.readTree(response).get("id").asText();
+
+        mockMvc.perform(get("/api/filings/{id}/pdf", filingId).header("Authorization", LEGAL_AUTH))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/pdf"))
+                .andExpect(header().string("Content-Disposition", org.hamcrest.Matchers.containsString("Form4-" + filingId + ".pdf")))
+                .andExpect(result -> org.junit.jupiter.api.Assertions.assertTrue(
+                        result.getResponse().getContentAsByteArray().length > 0));
+    }
+
+    @Test
+    void executiveCannotDownloadAnotherExecutivesPdf() throws Exception {
+        String response = mockMvc.perform(post("/api/demo/simulate-trade")
+                        .header("Authorization", EXEC_AUTH) // exec-1
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "executiveId", "exec-1", "transactionCode", "S", "shares", 100, "pricePerShare", 10.0))))
+                .andReturn().getResponse().getContentAsString();
+        String filingId = objectMapper.readTree(response).get("id").asText();
+
+        mockMvc.perform(get("/api/filings/{id}/pdf", filingId).header("Authorization", "Bearer exec-2-token"))
+                .andExpect(status().isForbidden());
     }
 }

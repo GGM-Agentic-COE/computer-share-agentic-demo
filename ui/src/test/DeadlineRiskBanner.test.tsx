@@ -1,29 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { DeadlineRiskBanner } from '../components/DeadlineRiskBanner';
-import type { Filing } from '../types';
-
-// S12: deadline-risk alert fires when < 12h remain against edgarCutoffAt.
-function makeFiling(overrides: Partial<Filing>): Filing {
-  return {
-    id: 'f1',
-    formType: 'FORM_4',
-    executiveId: 'exec-1',
-    status: 'VALIDATED',
-    issuer: 'Acme',
-    reportingPerson: 'J. Alvarez',
-    transactionDate: '2026-08-30',
-    transactionCode: 'S',
-    shares: 100,
-    pricePerShare: 10,
-    validationErrors: [],
-    deadlineAt: new Date().toISOString(),
-    edgarCutoffAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    ...overrides,
-  };
-}
+import { makeFiling } from './mockFiling';
 
 describe('DeadlineRiskBanner', () => {
   it('shows a warning when less than 12 hours remain', () => {
